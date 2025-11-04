@@ -11,7 +11,10 @@ st.divider()
 df = pd.read_csv('df_gh.csv', dtype={'CEP':str, 'CEP_HOSP':str})
 
 # Converte as colunas de data para formato datetime
-date_cols = ['DTCONSULT', 'DTDIAG', 'DTTRAT', 'DTULTINFO']
+date_cols = ['DTCONSULT', 
+            #  'DTDIAG', 
+             'DTTRAT', 
+             'DTULTINFO']
 
 for col_data in date_cols:
     df[col_data] = pd.to_datetime(df[col_data])

@@ -12,7 +12,7 @@ df = pd.read_csv('df_gh.csv', dtype={'CEP':str, 'CEP_HOSP':str})
 
 # Converte as colunas de data para formato datetime
 date_cols = ['DTCONSULT', 
-            #  'DTDIAG', 
+             'DTDIAG', 
              'DTTRAT', 
              'DTULTINFO']
 

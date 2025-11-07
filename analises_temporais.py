@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import notebook as nb
+import matplotlib.pyplot as plt
+from pyunicorn.timeseries import RecurrencePlot
+from sklearn.preprocessing import MinMaxScaler
 
 st.set_page_config(layout='wide')
 st.title('Análises Temporais')
@@ -122,6 +125,63 @@ st.write('\n')
 st.line_chart(data=casos_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'{tipo_grafico} com normalização')
 
 
-# ---------- Testes ----------
+# --------------- Testes ---------------
 st.divider()
 st.title('Testes de Recorrência')
+st.write('\n')
+st.write('\n')
+
+#---------- dados ----------
+
+col7, col8 = st.columns([1, 1])
+
+with col7:
+    dim = st.slider(
+        'Dim', 1, 5, 2, width=400
+    )
+
+with col8:      
+    tau = st.slider(
+        'Tau', 1, 5, 1, width=400
+    )
+
+
+st.write('\n')
+st.write('\n')
+
+#---------- testes de recorrência ----------
+scaler = MinMaxScaler()
+x = scaler.fit_transform(casos_periodo['Casos Originais'].dropna().values.reshape(-1, 1)).flatten()
+x_mm = scaler.fit_transform(casos_periodo['Médias Móveis'].dropna().values.reshape(-1, 1)).flatten()
+rp= RecurrencePlot(x, dim=dim, tau=tau, recurrence_rate=0.05)
+rp_mm = RecurrencePlot(x_mm, dim=dim, tau=tau, recurrence_rate=0.05)
+
+#----------- gráficos ----------
+
+fig, axes = plt.subplots(1, 2, figsize=(10,5))
+
+axes[0].imshow(rp.recurrence_matrix(), cmap='binary', origin='lower')
+axes[0].set_title('Recurrence Plot - Série Original')
+
+axes[1].imshow(rp_mm.recurrence_matrix(), cmap='binary', origin='lower')
+axes[1].set_title('Recurrence Plot - Série Suavizada - MM')
+
+for ax in axes:
+    ax.set_xlabel('Tempo')
+    ax.set_ylabel('Tempo')
+
+plt.tight_layout()
+st.pyplot(plt)
+
+#---------- métricas ----------
+st.divider()
+st.subheader('Métricas')
+
+metrics = pd.DataFrame({
+    'Série': ['Original', 'MM'],
+    'Recurrence Rate': [rp.recurrence_rate(), rp_mm.recurrence_rate()],
+    'Determinism': [rp.determinism(), rp_mm.determinism()],
+    'Laminarity': [rp.laminarity(), rp_mm.laminarity()]
+})
+
+st.write(metrics)

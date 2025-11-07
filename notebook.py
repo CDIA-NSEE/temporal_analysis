@@ -114,8 +114,8 @@ def analises_temporais_simp(df, hosp=[], col_tempo = 'DTCONSULT', freq = 'ME', e
   if hosp:
     df = df[df['DSCINST'].isin(hosp)]
   #selecionando só as consultas/inícios de tratamentos a partir de 2000
-  df = df[df['ECGRUP'].isin(ec)]
   df = df[df[col_tempo] >= '1994-01-01']
+  df = df[df['ECGRUP'].isin(ec)]
 
   #se a info for a última informação, selecionamos só os pacientes vivos
   if (col_tempo == 'DTULTINFO'):

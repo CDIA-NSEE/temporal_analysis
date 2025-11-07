@@ -3,4 +3,3 @@ pandas
 matplotlib
 pyunicorn
 scikit-learn
-sklearn

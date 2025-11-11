@@ -30,7 +30,6 @@ tipos_grafico = {
 }
 
 periodos_tempo = {
-    'Dias': 'D',
     'Semanas': 'W',
     'Meses': 'ME',
 }

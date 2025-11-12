@@ -74,6 +74,9 @@ with col1:
         default='Todos'
     )
 
+    norm = st.checkbox("Normalização por hospitais")
+
+
 
 
 with col2:
@@ -104,7 +107,7 @@ st.divider()
 
 # ---------- gráfico ----------
 
-casos_periodo = nb.analises_temporais_simp(df=df, hosp=hosp, col_tempo=tipos_grafico[tipo_grafico], freq=periodos_tempo[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=True)
+casos_periodo = nb.analises_temporais_simp(df=df, hosp=hosp, col_tempo=tipos_grafico[tipo_grafico], freq=periodos_tempo[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
 
 col5, col6 = st.columns([5, 1])
 
@@ -121,7 +124,8 @@ with col6:
 
 st.write('\n')
 st.write('\n')
-st.line_chart(data=casos_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'{tipo_grafico} com normalização')
+text_norm = 'com normalização' if norm else ''
+st.line_chart(data=casos_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'{tipo_grafico} {text_norm}')
 
 
 # --------------- Testes ---------------

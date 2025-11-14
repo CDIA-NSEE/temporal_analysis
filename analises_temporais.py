@@ -119,7 +119,7 @@ with col6:
     st.download_button(
         label= 'Baixe os dados em .csv',
         data=csv,
-        file_name=f'{tipo_grafico}'
+        file_name=f'{tipo_grafico}.csv'
     )
 
 st.write('\n')
@@ -140,7 +140,7 @@ col7, col8 = st.columns([1, 1])
 
 with col7:
     dim = st.slider(
-        'Dim', 1, 5, 2, width=400
+        'Dimensão', 1, 5, 2, width=400
     )
 
 with col8:      

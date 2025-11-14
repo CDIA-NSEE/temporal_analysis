@@ -119,7 +119,7 @@ with col6:
     st.download_button(
         label= 'Baixe os dados em .csv',
         data=csv,
-        file_name=f'{tipo_grafico()}.csv',
+        file_name=f'{tipo_grafico}.csv',
         mime='text/csv'
     )
 

@@ -11,7 +11,7 @@ st.divider()
 
 # ---------- dados ----------
 
-df = pd.read_csv('df_gh.csv', dtype={'CEP':str, 'CEP_HOSP':str})
+df = pd.read_csv('analises_temporais_simp.csv', dtype={'CEP':str, 'CEP_HOSP':str})
 
 # Converte as colunas de data para formato datetime
 date_cols = ['DTCONSULT', 
@@ -26,8 +26,14 @@ for col_data in date_cols:
 tipos_grafico = {
     'Número de Consultas': 'DTCONSULT',
     'Inícios de Tratamento':'DTTRAT',
-    'Últimas informações':'DTULTINFO'
+    'Últimas informações':'DTULTINFO',
 }
+
+caracteristicas = {
+    'Derivada': 'deriv_sbv',
+    'Integral': 'int_sbv',
+}
+
 
 periodos_tempo = {
     'Semanas': 'W',
@@ -74,10 +80,6 @@ with col1:
         default='Todos'
     )
 
-    norm = st.checkbox("Normalização por hospitais")
-
-
-
 
 with col2:
     topo = st.pills(
@@ -94,6 +96,8 @@ with col2:
         options=df.DSCINST.value_counts().index,
         placeholder='Selecione os hospitais desejados'
     )
+
+    norm = st.checkbox("Normalização por hospitais")
 
 
 colunas = st.segmented_control(
@@ -129,8 +133,27 @@ text_norm = 'com normalização' if norm else ''
 st.line_chart(data=casos_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'{tipo_grafico} {text_norm}')
 
 
-# --------------- Testes ---------------
+#---------- Integrais e Derivadas ----------
 st.divider()
+st.subheader('Características da Distribuição Temporal')
+
+carac = st.pills(
+        "", caracteristicas.keys(), selection_mode='single',
+        default='Derivada', 
+    )
+
+carac_periodo = nb.caract_dist(df=df, carac=caracteristicas[carac], hosp=hosp, col_tempo=tipos_grafico[tipo_grafico], freq=periodos_tempo[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
+text_norm = 'com normalização' if norm else ''
+text = "Integrais" if carac == 'Integral' else 'Derivadas'
+st.line_chart(data=carac_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'Média das {text} {text_norm}')
+
+
+# --------------- Testes ---------------
+st.write('\n')
+st.write('\n')
+st.divider()
+st.write('\n')
+st.write('\n')
 st.title('Testes de Recorrência')
 st.write('\n')
 st.write('\n')

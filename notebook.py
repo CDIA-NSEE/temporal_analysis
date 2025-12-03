@@ -115,6 +115,8 @@ def analises_temporais_simp(df, hosp=[], col_tempo = 'DTCONSULT', freq = 'ME', e
     df = df[df['DSCINST'].isin(hosp)]
   #selecionando só as consultas/inícios de tratamentos a partir de 2000
   df = df[df[col_tempo] >= '1994-01-01']
+
+  #seleciona o estadiamento clínico especificado
   df = df[df['ECGRUP'].isin(ec)]
 
   #se a info for a última informação, selecionamos só os pacientes vivos
@@ -144,3 +146,53 @@ def analises_temporais_simp(df, hosp=[], col_tempo = 'DTCONSULT', freq = 'ME', e
   }
   
   return pd.DataFrame(casos_periodo)
+
+def caract_dist(df, carac='deriv_sbv', hosp=[], col_tempo = 'DTCONSULT', freq = 'ME', ec= ['I', 'II', 'III', 'IV'], topo = [], media_movel=4, normalizacao=True):
+
+  #cópia do banco de dados
+  df = df.copy()
+  #seleção das topografias escolhidas
+  if topo: # Check if the list is not empty
+    df = df[df['TOPOGRUP'].isin(topo)]
+  
+  if hosp:
+    df = df[df['DSCINST'].isin(hosp)]
+  #selecionando só as consultas/inícios de tratamentos a partir de 2000
+  df = df[df[col_tempo] >= '2000-01-01']
+
+  #seleciona o estadiamento clínico especificado
+  df = df[df['ECGRUP'].isin(ec)]
+
+  #se a info for a última informação, selecionamos só os pacientes vivos
+  if (col_tempo == 'DTULTINFO'):
+    df = df[df['ULTINFO'].isin([1])]
+  
+
+  #pegamos a média da integral/derivada de acordo com a frequência
+  df = df.set_index(col_tempo)
+  filt_tempo = df[carac].resample(freq).mean()
+
+
+  if normalizacao:
+    contagem_temporal = contagem_temporal_hosp(df, col_tempo, freq)
+    casos_normalizados = []
+    for indice in filt_tempo.index:
+      contagem_hospitais = contagem_temporal.loc[indice]
+      casos_normalizados.append(filt_tempo.loc[indice] / contagem_hospitais)
+
+    filt_tempo = pd.Series(casos_normalizados, index=filt_tempo.index, name='casos_normalizados')
+
+  filt_tempo_mm = filt_tempo.rolling(window=media_movel).mean()
+
+  trans_carac = {
+    'deriv_sbv': 'Derivada',
+    'int_sbv': 'Integral'
+  }
+  #informações para os gráficos
+  carac_periodo = {
+    'x': filt_tempo.index,
+    'Casos Originais': filt_tempo.values,
+    'Médias Móveis': filt_tempo_mm
+  }
+  
+  return pd.DataFrame(carac_periodo)

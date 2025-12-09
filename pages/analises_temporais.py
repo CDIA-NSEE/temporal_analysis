@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from st_functions import load_data
 from notebook import at as nb
 import matplotlib.pyplot as plt
 from pyunicorn.timeseries import RecurrencePlot
@@ -12,16 +13,11 @@ st.divider()
 
 # ---------- dados ----------
 
-df = pd.read_csv(r'datasets\analises_temporais_simp.csv', dtype={'CEP':str, 'CEP_HOSP':str})
-
-# Converte as colunas de data para formato datetime
-date_cols = ['DTCONSULT', 
-             'DTDIAG', 
-             'DTTRAT', 
-             'DTULTINFO']
-
-for col_data in date_cols:
-    df[col_data] = pd.to_datetime(df[col_data])
+df = load_data(
+    file_path=r'datasets\analises_temporais_simp.csv',
+    dtype={'CEP':str, 'CEP_HOSP':str},
+    date_cols=['DTCONSULT', 'DTDIAG', 'DTTRAT', 'DTULTINFO'],
+)
 
 
 tipos_grafico = {

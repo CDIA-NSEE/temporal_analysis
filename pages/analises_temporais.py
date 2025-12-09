@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from notebook import notebook_at as nb
+from notebook import at as nb
 import matplotlib.pyplot as plt
 from pyunicorn.timeseries import RecurrencePlot
 from sklearn.preprocessing import MinMaxScaler

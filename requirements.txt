@@ -3,3 +3,7 @@ pandas
 matplotlib
 pyunicorn
 scikit-learn
+folium
+streamlit-folium
+geopandas
+shapely

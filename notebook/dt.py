@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import streamlit as st
 
 def tratamento_por_drs(df):
 
@@ -189,4 +189,60 @@ def boxplots_ec(df, col, x_title):
 
     # Exibe a figura
     fig.show()
+
+@st.cache_data(show_spinner="Calculando métricas...")
+def características_drs(df, topo, ec, drs):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    #seleciona o estadiamento clínico especificado
+    df = df[df['ECGRUP'].isin(ec)]
+
+    # #seleção das DRS escolhidas
+    if drs != None:
+        df = df[df['DRS'] == drs]
+    
+    total_pacientes = df.shape[0]
+    dist_media = round(df['DISTANCIA_CARRO'].mean(), 2)
+    dist_mediana = round(df['DISTANCIA_CARRO'].median(), 2)
+    tempo_medio = round(df['TEMPO_CARRO'].mean(), 2)
+    tempo_mediano = round(df['TEMPO_CARRO'].median(), 2)
+    mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
+
+    externa_popular = (
+        df[df['DRS'] != df['DRS_INST']]
+        .groupby(['DRS','DRS_INST'])
+        .size()
+        .rename('qtd')
+        .reset_index()
+    )
+
+    externa_top = (
+        externa_popular
+        .sort_values(['DRS','qtd'], ascending=[True, False])
+        .groupby("DRS")
+        .first()
+        .rename(columns={'DRS_INST': 'top_DRS_ext', 'qtd': 'qtd_princ_DRS_ext'})
+    )
+
+    resultados = {
+        'Total de Pacientes': total_pacientes,
+        'Distância Média (km)': dist_media,
+        'Distância Mediana (km)': dist_mediana,
+        'Tempo Médio (min)': tempo_medio,
+        'Tempo Mediano (min)': tempo_mediano,
+        'Pacientes na Mesma DRS': mesma_drs,
+        'Principal DRS de Saida': externa_top['top_DRS_ext'],
+        'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext']
+    }
+
+    return resultados
+
+    
+
+
+
 

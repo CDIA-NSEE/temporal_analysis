@@ -1,5 +1,7 @@
 import streamlit as st
 from st_functions import load_data
+from streamlit_folium import st_folium
+from notebook.dt import características_drs
 
 st.set_page_config(layout='wide', page_title='Análises de Distâncias e Tempos', page_icon='midia\conecta-logo.png')
 
@@ -58,8 +60,15 @@ d = st.radio(
     index = 0,
 )
 
-drs = st.multiselect(
+drs = st.selectbox(
     label='DRS',
     options=sorted(df[tipo_drs[d]].unique()),
-    placeholder=f'Selecione as {d} desejadas',
+    placeholder=f'Selecione a {d} desejada',
+    index=None,
 )
+
+resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs)
+st.write(resultados)
+
+# st.caption('ConeCta-SP - 2025', width="stretch")
+

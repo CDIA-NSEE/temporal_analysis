@@ -1,5 +1,5 @@
 import streamlit as st
-from st_functions import load_data
+from st_functions import load_data, load_map, load_map_pydeck
 from streamlit_folium import st_folium
 from notebook.dt import características_drs
 
@@ -67,11 +67,21 @@ drs = st.selectbox(
     index=None,
 )
 
-# ---------- métricas ----------
+resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
+resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
 
+# ---------- mapa ----------
+
+deck = load_map_pydeck()
+st.pydeck_chart(deck)
+
+# ---------- métricas ----------
 st.divider()
 
-resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
+
+if drs != None:
+    st.header(f"DRS {drs}")
+    st.badge(f"Principal DRS externa para tratamento: DRS {resultados['Principal DRS de Saida']}", color='blue', icon=':material/fluid_med:')
 
 st.write('\n')
 st.write('\n')
@@ -79,13 +89,16 @@ st.write('\n')
 
 c, d, e, f, g = st.columns(5)
 with c:
-    st.metric('Total de Pacientes', f"{resultados['Total de Pacientes']:,}".replace(',','.'), )
+    st.metric(':orange[Total de Pacientes]', f"{resultados['Total de Pacientes']:,}".replace(',','.'), )
 with d:
     if drs != None:
-        st.metric(f"Pacientes que se tratam na DRS {drs}", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+        st.metric(f":orange[Pacientes que se tratam na DRS {drs}]", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
 with e:
     if drs != None:
-        st.metric(f"Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+        st.metric(f":blue[Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+with f:
+    if drs != None:
+        st.metric(f":blue[Distância média para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Distância Média de Saída (km)']:,}".replace(',','.'))
 
 st.divider()
 
@@ -103,7 +116,6 @@ with col4:
 with col5:
     st.metric('Tempo mediano', f"{resultados['Tempo Mediano (min)']} min", border=True)
 
-resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
 
 col11, col12, col13, col14, col15 = st.columns(5)
 with col11:
@@ -118,4 +130,6 @@ with col14:
     st.metric('Tempo médio', f"{resultados_o['Tempo Médio (min)']} min", border=True)
 with col15:
     st.metric('Tempo mediano', f"{resultados_o['Tempo Mediano (min)']} min", border=True)
+
+st.divider()
 

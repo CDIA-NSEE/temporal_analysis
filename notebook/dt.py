@@ -202,14 +202,14 @@ def características_drs(df, topo, ec, drs, col):
     df = df[df['ECGRUP'].isin(ec)]
 
     # #seleção das DRS escolhidas
-    if drs != None:
+    if drs is not None:
         df = df[df['DRS'] == drs]
     
     total_pacientes = df.shape[0]
     dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
     dist_mediana = round(df[f'DISTANCIA_{col}'].median(), 2)
-    tempo_medio = round(df[f'TEMPO_{col}'].mean(), 2)
-    tempo_mediano = round(df[f'TEMPO_{col}'].median(), 2)
+    tempo_medio = round(df[f'TEMPO_{col}'].mean())
+    tempo_mediano = round(df[f'TEMPO_{col}'].median())
     mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
 
     externa_popular = (
@@ -228,6 +228,10 @@ def características_drs(df, topo, ec, drs, col):
         .rename(columns={'DRS_INST': 'top_DRS_ext', 'qtd': 'qtd_princ_DRS_ext'})
     )
 
+    drs_ext_princ = externa_top['top_DRS_ext'].values[0]
+    df_princ_ext = df[(df['DRS'] != df['DRS_INST']) & (df['DRS_INST'] == drs_ext_princ)]
+    media_dist_principal = round(df_princ_ext[f'DISTANCIA_{col}'].mean(), 2)
+
     resultados = {
         'Total de Pacientes': total_pacientes,
         'Distância Média (km)': dist_media,
@@ -236,7 +240,8 @@ def características_drs(df, topo, ec, drs, col):
         'Tempo Mediano (min)': tempo_mediano,
         'Pacientes na Mesma DRS': mesma_drs,
         'Principal DRS de Saida': externa_top['top_DRS_ext'].values[0],
-        'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext']
+        'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext'].values[0],
+        'Distância Média de Saída (km)': media_dist_principal
     }
 
     return resultados

@@ -191,7 +191,7 @@ def boxplots_ec(df, col, x_title):
     fig.show()
 
 @st.cache_data(show_spinner="Calculando métricas...")
-def características_drs(df, topo, ec, drs):
+def características_drs(df, topo, ec, drs, col):
 
     df = df.copy()
 
@@ -206,10 +206,10 @@ def características_drs(df, topo, ec, drs):
         df = df[df['DRS'] == drs]
     
     total_pacientes = df.shape[0]
-    dist_media = round(df['DISTANCIA_CARRO'].mean(), 2)
-    dist_mediana = round(df['DISTANCIA_CARRO'].median(), 2)
-    tempo_medio = round(df['TEMPO_CARRO'].mean(), 2)
-    tempo_mediano = round(df['TEMPO_CARRO'].median(), 2)
+    dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
+    dist_mediana = round(df[f'DISTANCIA_{col}'].median(), 2)
+    tempo_medio = round(df[f'TEMPO_{col}'].mean(), 2)
+    tempo_mediano = round(df[f'TEMPO_{col}'].median(), 2)
     mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
 
     externa_popular = (
@@ -235,7 +235,7 @@ def características_drs(df, topo, ec, drs):
         'Tempo Médio (min)': tempo_medio,
         'Tempo Mediano (min)': tempo_mediano,
         'Pacientes na Mesma DRS': mesma_drs,
-        'Principal DRS de Saida': externa_top['top_DRS_ext'],
+        'Principal DRS de Saida': externa_top['top_DRS_ext'].values[0],
         'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext']
     }
 

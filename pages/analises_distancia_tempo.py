@@ -67,8 +67,55 @@ drs = st.selectbox(
     index=None,
 )
 
-resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs)
-st.write(resultados)
+# ---------- métricas ----------
 
-# st.caption('ConeCta-SP - 2025', width="stretch")
+st.divider()
+
+resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
+
+st.write('\n')
+st.write('\n')
+st.write('\n')
+
+c, d, e, f, g = st.columns(5)
+with c:
+    st.metric('Total de Pacientes', f"{resultados['Total de Pacientes']:,}".replace(',','.'), )
+with d:
+    if drs != None:
+        st.metric(f"Pacientes que se tratam na DRS {drs}", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+with e:
+    if drs != None:
+        st.metric(f"Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+
+st.divider()
+
+col1, col2, col3, col4, col5 = st.columns(5)
+with col1:
+    left, right = st.columns([1, 2])
+    left.space()
+    right.markdown("# :orange[:material/directions_car:]")
+with col2:
+    st.metric('Distância média', f"{resultados['Distância Média (km)']} km", border=True)
+with col3:
+    st.metric('Distância mediana', f"{resultados['Distância Mediana (km)']} km", border=True)
+with col4:
+    st.metric('Tempo médio', f"{resultados['Tempo Médio (min)']} min", border=True)
+with col5:
+    st.metric('Tempo mediano', f"{resultados['Tempo Mediano (min)']} min", border=True)
+
+resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
+
+col11, col12, col13, col14, col15 = st.columns(5)
+with col11:
+    left, right = st.columns([1, 2])
+    left.space()
+    right.markdown("# :orange[:material/directions_bus:]")
+with col12:
+    st.metric('Distância média', f"{resultados_o['Distância Média (km)']} km", border=True)
+with col13:
+    st.metric('Distância mediana', f"{resultados_o['Distância Mediana (km)']} km", border=True)
+with col14:
+    st.metric('Tempo médio', f"{resultados_o['Tempo Médio (min)']} min", border=True)
+with col15:
+    st.metric('Tempo mediano', f"{resultados_o['Tempo Mediano (min)']} min", border=True)
 

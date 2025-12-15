@@ -1,5 +1,5 @@
 import streamlit as st
-from st_functions import load_data, load_map, load_map_pydeck
+from st_functions import load_data, load_map_pydeck
 from streamlit_folium import st_folium
 from notebook.dt import características_drs
 
@@ -38,6 +38,11 @@ tipo_drs = {
     'DRS de Hospital': 'DRS_INST',
 }
 
+# ---------- mapa ----------
+
+deck = load_map_pydeck()
+st.pydeck_chart(deck)
+
 # ---------- página ----------
 
 estadiamento = st.pills(
@@ -69,11 +74,6 @@ drs = st.selectbox(
 
 resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
 resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
-
-# ---------- mapa ----------
-
-deck = load_map_pydeck()
-st.pydeck_chart(deck)
 
 # ---------- métricas ----------
 st.divider()

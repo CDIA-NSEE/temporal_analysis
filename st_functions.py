@@ -7,6 +7,8 @@ import folium
 from streamlit_folium import st_folium
 from shapely.geometry import Polygon, MultiPolygon, LineString, MultiLineString, Point, MultiPoint
 
+# ---------- carregamento do banco de dados ----------
+
 @st.cache_data(show_spinner="Carregando dados...")
 def load_data(file_path: str, dtype: dict, date_cols: list) -> pd.DataFrame:
 
@@ -17,6 +19,7 @@ def load_data(file_path: str, dtype: dict, date_cols: list) -> pd.DataFrame:
     
     return df
 
+# ---------- funções para carregamento do mapa ----------
 
 def geometrycollection_to_multipolygon(geometry_collection):
   if geometry_collection.geom_type == "GeometryCollection":
@@ -58,31 +61,6 @@ def hex_to_rgb(hex_color):
 
 
 @st.cache_data(show_spinner="Carregando mapa...")
-def load_map():
-    drs_shapefile = gpd.read_file('datasets\sp_drs_group_interactive.kml').copy()
-    drs_shapefile.drop(columns=['id','description', 'timestamp','begin','end','altitudeMode','tessellate','extrude','visibility','drawOrder','icon','CD_MUN','NM_MUN','SIGLA_UF','AREA_KM2'], inplace=True)
-    NOME_DRS = ["Grande São Paulo", "Araçatuba", "Araraquara", "Baixada Santista", "Barretos", "Bauru", "Campinas", "Franca", "Marília", "Piracicaba", "Presidente Prudente", "Registro", "Ribeirão Preto", "São João da Boa Vista", "São José do Rio Preto", "Sorocaba", "Taubaté"]
-    drs_shapefile['Nome'] = NOME_DRS
-    #    drs_shapefile.rename(columns={'Name': 'DRS_completa'}, inplace = True)
-    drs_shapefile.drop(columns=['Name'], inplace=True)
-
-    NO_DRS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-    drs_shapefile["DRS"] = NO_DRS
-    drs_shapefile['geometry'] = drs_shapefile['geometry'].apply(lambda geom: geometrycollection_to_multipolygon(geom))
-    drs_shapefile = gpd.GeoDataFrame(drs_shapefile, geometry='geometry')
-    geojson = gpd.GeoDataFrame.to_json(drs_shapefile)
-
-    m = folium.Map(location=[-22.9, -46.6], zoom_start=7)
-
-    folium.GeoJson(
-        geojson,
-        name="DRS",
-        style_function=style_drs,
-    ).add_to(m)
-
-    folium.LayerControl().add_to(m)
-    return m
-
 def load_map_pydeck():
 
     # 1. LER E PREPARAR GEOMETRIAS -------------------------
@@ -134,8 +112,8 @@ def load_map_pydeck():
     # 4. VIEW ----------------------------------------------
     view_state = pdk.ViewState(
         latitude=-22.9,
-        longitude=-46.6,
-        zoom=7,
+        longitude=-48.5,
+        zoom=5.5,
     )
 
     # 5. MAPA FINAL ----------------------------------------
@@ -143,7 +121,7 @@ def load_map_pydeck():
         layers=[layer],
         initial_view_state=view_state,
         map_style="mapbox://styles/mapbox/light-v9",
-        tooltip={"text": "DRS: {Nome}"},
+        tooltip={"text": "DRS {DRS}: {Nome}"},
     )
 
     return deck

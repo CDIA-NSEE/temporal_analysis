@@ -60,7 +60,7 @@ def hex_to_rgb(hex_color):
     return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
 
-@st.cache_data(show_spinner="Carregando mapa...")
+@st.cache_resource(show_spinner="Carregando mapa...")
 def load_map_pydeck():
 
     # 1. LER E PREPARAR GEOMETRIAS -------------------------
@@ -114,6 +114,8 @@ def load_map_pydeck():
         latitude=-22.9,
         longitude=-48.5,
         zoom=5.5,
+        min_zoom=5.5,
+        max_zoom=5.5,
     )
 
     # 5. MAPA FINAL ----------------------------------------

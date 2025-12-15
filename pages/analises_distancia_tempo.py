@@ -8,7 +8,14 @@ st.set_page_config(layout='wide', page_title='Análises de Distâncias e Tempos'
 st.title('Análises de Distâncias e Tempos')
 st.divider()
 
+# ---------- mapa ----------
+
+deck = load_map_pydeck()
+popover = st.popover('Mapa das DRS', width='stretch')
+popover.pydeck_chart(deck)
+
 # ---------- dados ----------
+
 
 df = load_data(
     file_path=r'datasets\dt_simp.csv', 
@@ -38,42 +45,70 @@ tipo_drs = {
     'DRS de Hospital': 'DRS_INST',
 }
 
-# ---------- mapa ----------
+drs_dict = {
+    "DRS 1 - Grande São Paulo": 1,
+    "DRS 2 - Araçatuba": 2,
+    "DRS 3 - Araraquara": 3,
+    "DRS 4 - Baixada Santista": 4,
+    "DRS 5 - Barretos": 5,
+    "DRS 6 - Bauru": 6,
+    "DRS 7 - Campinas": 7,
+    "DRS 8 - Franca": 8,
+    "DRS 9 - Marília": 9,
+    "DRS 10 - Piracicaba": 10,
+    "DRS 11 - Presidente Prudente": 11,
+    "DRS 12 - Registro": 12,
+    "DRS 13 - Ribeirão Preto": 13,
+    "DRS 14 - São João da Boa Vista": 14,
+    "DRS 15 - São José do Rio Preto": 15,
+    "DRS 16 - Sorocaba": 16,
+    "DRS 17 - Taubaté": 17
+}
 
-deck = load_map_pydeck()
-st.pydeck_chart(deck)
 
 # ---------- página ----------
 
-estadiamento = st.pills(
-        label='Estadiamento Clínico',
-        options=estadiamento_clinico.keys(),
-        selection_mode='single',
-        default='Todos'
+with st.form(key="filtros", enter_to_submit=True, border=True):
+    estadiamento = st.pills(
+            label='Estadiamento Clínico',
+            options=estadiamento_clinico.keys(),
+            selection_mode='single',
+            default='Todos'
+        )
+
+    topo = st.pills(
+        "Topografias", topografias.keys(), selection_mode='single',
+        default='Todas'
     )
 
-topo = st.pills(
-    "Topografias", topografias.keys(), selection_mode='single',
-    default='Todas'
-)
+    d = st.radio(
+        label='DRS de Residência ou de Hospital',
+        options=tipo_drs.keys(),
+        horizontal=True,
+        label_visibility='collapsed',
+        index = 0,
+    )
 
-d = st.radio(
-    label='DRS de Residência ou de Hospital',
-    options=tipo_drs.keys(),
-    horizontal=True,
-    label_visibility='collapsed',
-    index = 0,
-)
+    drs = st.selectbox(
+        label='DRS',
+        options=drs_dict.keys(),
+        placeholder=f'Selecione a {d} desejada',
+        index=None,
+    )
 
-drs = st.selectbox(
-    label='DRS',
-    options=sorted(df[tipo_drs[d]].unique()),
-    placeholder=f'Selecione a {d} desejada',
-    index=None,
-)
+    st.write('\n')
 
-resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
-resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
+    c1, c2 = st.columns(2)
+    with c1:
+        with st.container(horizontal=True):
+            st.space('stretch')
+            submitted = st.form_submit_button("Aplicar Filtros", type='secondary')
+
+    if submitted:
+        st.info('Filtros aplicados com sucesso!')
+
+resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs_dict[drs], 'CARRO')
+resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs_dict[drs], 'TRANSP')
 
 # ---------- métricas ----------
 st.divider()

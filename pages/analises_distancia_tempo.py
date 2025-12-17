@@ -1,21 +1,14 @@
 import streamlit as st
 from st_functions import load_data, load_map_pydeck
 from streamlit_folium import st_folium
-from notebook.dt import características_drs
+from notebook.dt import características_drs, estatisticas_ec, boxplots_ec
 
 st.set_page_config(layout='wide', page_title='Análises de Distâncias e Tempos', page_icon='midia\conecta-logo.png')
 
 st.title('Análises de Distâncias e Tempos')
 st.divider()
 
-# ---------- mapa ----------
-
-deck = load_map_pydeck()
-popover = st.popover('Mapa das DRS', width='stretch')
-popover.pydeck_chart(deck)
-
 # ---------- dados ----------
-
 
 df = load_data(
     file_path=r'datasets\dt_simp.csv', 
@@ -107,8 +100,10 @@ with st.form(key="filtros", enter_to_submit=True, border=True):
     if submitted:
         st.info('Filtros aplicados com sucesso!')
 
-resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs_dict[drs], 'CARRO')
-resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs_dict[drs], 'TRANSP')
+drs = drs_dict[drs] if drs != None else None
+
+resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
+resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
 
 # ---------- métricas ----------
 st.divider()
@@ -168,3 +163,18 @@ with col15:
 
 st.divider()
 
+# ---------- tabela - estatísticas por estadiamento clínico----------
+
+st.subheader('Estatísticas por Estadiamento Clínico')
+st.write('\n')
+
+est_ec = estatisticas_ec(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'DISTANCIA_CARRO')
+st.dataframe(
+    est_ec,
+    hide_index=True,
+)
+
+# ---------- mapa ----------
+
+deck = load_map_pydeck()
+st.pydeck_chart(deck)

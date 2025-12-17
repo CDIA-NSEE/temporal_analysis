@@ -142,21 +142,35 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
         display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
         print()                                       # Linha em branco para separar visualmente os blocos de saída
 
-def estatisticas_ec(df, col):
+def estatisticas_ec(df, topo, ec, drs, col):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    #seleciona o estadiamento clínico especificado
+    df = df[df['ECGRUP'].isin(ec)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        df = df[df['DRS'] == drs]
 
     # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
     # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
     geral = df[col].describe().round(2).rename('Geral')
 
+    tudo_junto = geral.to_frame()  # Inicializa o DataFrame final com as estatísticas gerais
+    
     # Estatísticas descritivas agrupadas por estágio clínico (ECGRUP)
     # Aplica describe() por grupo, arredonda para 2 casas e transpõe para facilitar a concatenação
-    ec = df.groupby('ECGRUP')[col].describe().round(2).T
-
-    # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
-    tudo_junto = pd.concat([geral, ec], axis=1)
+    if ec == ['I', 'II', 'III', 'IV']:
+        ec = df.groupby('ECGRUP')[col].describe().round(2).T
+        # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
+        tudo_junto = pd.concat([geral, ec], axis=1)
 
     # Exibe o DataFrame resultante com as estatísticas compiladas
-    display(tudo_junto)
+    return tudo_junto
 
 def boxplots_ec(df, col, x_title):
 

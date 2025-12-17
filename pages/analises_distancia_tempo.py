@@ -88,6 +88,8 @@ with st.form(key="filtros", enter_to_submit=True, border=True):
         placeholder=f'Selecione a {d} desejada',
         index=None,
     )
+    
+    drs = drs_dict[drs] if drs != None else None
 
     st.write('\n')
 
@@ -100,7 +102,6 @@ with st.form(key="filtros", enter_to_submit=True, border=True):
     if submitted:
         st.info('Filtros aplicados com sucesso!')
 
-drs = drs_dict[drs] if drs != None else None
 
 resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')
 resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
@@ -166,15 +167,22 @@ st.divider()
 # ---------- tabela - estatísticas por estadiamento clínico----------
 
 st.subheader('Estatísticas por Estadiamento Clínico')
-st.write('\n')
+st.write('\n\n')
 
-est_ec = estatisticas_ec(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'DISTANCIA_CARRO')
+est_ec = estatisticas_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO')
 st.dataframe(
     est_ec,
     hide_index=True,
 )
 
+# ---------- boxplots ----------
+
+boxplots = boxplots_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO', 'Estadiamento Clínico')
+st.plotly_chart(boxplots)
+
 # ---------- mapa ----------
 
+st.subheader('Mapa das DRS do Estado de São Paulo')
+st.write('\n')
 deck = load_map_pydeck()
 st.pydeck_chart(deck)

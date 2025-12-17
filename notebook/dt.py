@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plotly.graph_objects as go
 import streamlit as st
 
 def tratamento_por_drs(df):
@@ -142,15 +143,13 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
         display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
         print()                                       # Linha em branco para separar visualmente os blocos de saída
 
-def estatisticas_ec(df, topo, ec, drs, col):
+@st.cache_data(show_spinner="Calculando estatísticas...")
+def estatisticas_ec(df, topo, drs, col):
 
     df = df.copy()
 
     #seleção das topografias escolhidas
     df = df[df['TOPOGRUP'].isin(topo)]
-
-    #seleciona o estadiamento clínico especificado
-    df = df[df['ECGRUP'].isin(ec)]
 
     # #seleção das DRS escolhidas
     if drs is not None:
@@ -160,19 +159,26 @@ def estatisticas_ec(df, topo, ec, drs, col):
     # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
     geral = df[col].describe().round(2).rename('Geral')
 
-    tudo_junto = geral.to_frame()  # Inicializa o DataFrame final com as estatísticas gerais
-    
     # Estatísticas descritivas agrupadas por estágio clínico (ECGRUP)
     # Aplica describe() por grupo, arredonda para 2 casas e transpõe para facilitar a concatenação
-    if ec == ['I', 'II', 'III', 'IV']:
-        ec = df.groupby('ECGRUP')[col].describe().round(2).T
-        # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
-        tudo_junto = pd.concat([geral, ec], axis=1)
+    ec = df.groupby('ECGRUP')[col].describe().round(2).T
+    # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
+    tudo_junto = pd.concat([geral, ec], axis=1)
 
     # Exibe o DataFrame resultante com as estatísticas compiladas
     return tudo_junto
 
-def boxplots_ec(df, col, x_title):
+@st.cache_data(show_spinner="Gerando gráficos...")
+def boxplots_ec(df, topo, drs, col, x_title):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        df = df[df['DRS'] == drs]
 
     fig = go.Figure()
 
@@ -201,8 +207,7 @@ def boxplots_ec(df, col, x_title):
     # Remove legenda (opcional, para deixar o gráfico mais limpo)
     fig.update_layout(showlegend=False)
 
-    # Exibe a figura
-    fig.show()
+    return fig
 
 @st.cache_data(show_spinner="Calculando métricas...")
 def características_drs(df, topo, ec, drs, col):
@@ -260,7 +265,6 @@ def características_drs(df, topo, ec, drs, col):
 
     return resultados
 
-    
 
 
 

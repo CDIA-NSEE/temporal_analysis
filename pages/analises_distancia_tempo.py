@@ -166,7 +166,7 @@ st.divider()
 
 # ---------- tabela - estatísticas por estadiamento clínico----------
 
-st.subheader('Estatísticas por Estadiamento Clínico')
+st.subheader(f'Estatísticas por Estadiamento Clínico - {topo}')
 st.write('\n\n')
 
 est_ec = estatisticas_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO')
@@ -176,13 +176,13 @@ st.dataframe(
 )
 
 # ---------- boxplots ----------
-
+st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {topo}')
 boxplots = boxplots_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO', 'Estadiamento Clínico')
 st.plotly_chart(boxplots)
 
 # ---------- mapa ----------
 
-st.subheader('Mapa das DRS do Estado de São Paulo')
-st.write('\n')
-deck = load_map_pydeck()
-st.pydeck_chart(deck)
+# st.subheader('Mapa das DRS do Estado de São Paulo')
+# st.write('\n')
+# deck = load_map_pydeck()
+# st.pydeck_chart(deck)

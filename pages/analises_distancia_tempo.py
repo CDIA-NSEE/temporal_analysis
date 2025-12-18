@@ -165,8 +165,10 @@ with col15:
 st.divider()
 
 # ---------- tabela - estatísticas por estadiamento clínico----------
+titulo_topo = f'todas as topografias' if topo == 'Todas' else topo
+titulo_drs = f'DRS {drs}' if drs != None else 'todas as DRS'
 
-st.subheader(f'Estatísticas por Estadiamento Clínico - {topo}')
+st.subheader(f'Estatísticas por Estadiamento Clínico - {titulo_topo}, {titulo_drs}')
 st.write('\n\n')
 
 est_ec = estatisticas_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO')
@@ -176,7 +178,8 @@ st.dataframe(
 )
 
 # ---------- boxplots ----------
-st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {topo}')
+st.space('medium')
+st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {titulo_topo}, {titulo_drs}')
 boxplots = boxplots_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO', 'Estadiamento Clínico')
 st.plotly_chart(boxplots)
 

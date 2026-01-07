@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-@st.cache_data
+@st.cache_data(show_spinner="Carregando dados...")
 def load_data(file_path: str, dtype: dict, date_cols: list) -> pd.DataFrame:
 
     df = pd.read_csv(file_path, dtype=dtype)

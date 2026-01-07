@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import streamlit as st
 
 def tratamento_por_drs(df):
 
@@ -142,7 +143,17 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
         display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
         print()                                       # Linha em branco para separar visualmente os blocos de saída
 
-def estatisticas_ec(df, col):
+@st.cache_data(show_spinner="Calculando estatísticas...")
+def estatisticas_ec(df, topo, drs, col):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        df = df[df['DRS'] == drs]
 
     # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
     # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
@@ -151,14 +162,23 @@ def estatisticas_ec(df, col):
     # Estatísticas descritivas agrupadas por estágio clínico (ECGRUP)
     # Aplica describe() por grupo, arredonda para 2 casas e transpõe para facilitar a concatenação
     ec = df.groupby('ECGRUP')[col].describe().round(2).T
-
     # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
     tudo_junto = pd.concat([geral, ec], axis=1)
 
     # Exibe o DataFrame resultante com as estatísticas compiladas
-    display(tudo_junto)
+    return tudo_junto
 
-def boxplots_ec(df, col, x_title):
+@st.cache_data(show_spinner="Gerando gráficos...")
+def boxplots_ec(df, topo, drs, col, x_title):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        df = df[df['DRS'] == drs]
 
     fig = go.Figure()
 
@@ -187,6 +207,65 @@ def boxplots_ec(df, col, x_title):
     # Remove legenda (opcional, para deixar o gráfico mais limpo)
     fig.update_layout(showlegend=False)
 
-    # Exibe a figura
-    fig.show()
+    return fig
+
+@st.cache_data(show_spinner="Calculando métricas...")
+def características_drs(df, topo, ec, drs, col):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    #seleciona o estadiamento clínico especificado
+    df = df[df['ECGRUP'].isin(ec)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        df = df[df['DRS'] == drs]
+    
+    total_pacientes = df.shape[0]
+    dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
+    dist_mediana = round(df[f'DISTANCIA_{col}'].median(), 2)
+    tempo_medio = round(df[f'TEMPO_{col}'].mean())
+    tempo_mediano = round(df[f'TEMPO_{col}'].median())
+    mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
+
+    externa_popular = (
+        df[df['DRS'] != df['DRS_INST']]
+        .groupby(['DRS','DRS_INST'])
+        .size()
+        .rename('qtd')
+        .reset_index()
+    )
+
+    externa_top = (
+        externa_popular
+        .sort_values(['DRS','qtd'], ascending=[True, False])
+        .groupby("DRS")
+        .first()
+        .rename(columns={'DRS_INST': 'top_DRS_ext', 'qtd': 'qtd_princ_DRS_ext'})
+    )
+
+    drs_ext_princ = externa_top['top_DRS_ext'].values[0]
+    df_princ_ext = df[(df['DRS'] != df['DRS_INST']) & (df['DRS_INST'] == drs_ext_princ)]
+    media_dist_principal = round(df_princ_ext[f'DISTANCIA_{col}'].mean(), 2)
+
+    resultados = {
+        'Total de Pacientes': total_pacientes,
+        'Distância Média (km)': dist_media,
+        'Distância Mediana (km)': dist_mediana,
+        'Tempo Médio (min)': tempo_medio,
+        'Tempo Mediano (min)': tempo_mediano,
+        'Pacientes na Mesma DRS': mesma_drs,
+        'Principal DRS de Saida': externa_top['top_DRS_ext'].values[0],
+        'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext'].values[0],
+        'Distância Média de Saída (km)': media_dist_principal
+    }
+
+    return resultados
+
+
+
+
 

@@ -7,14 +7,14 @@ from pyunicorn.timeseries import RecurrencePlot
 from sklearn.preprocessing import MinMaxScaler
 
 
-st.set_page_config(layout='wide', page_title='Análises Temporais', page_icon='midia\conecta-logo.png')
+st.set_page_config(layout='wide', page_title='Análises Temporais', page_icon='midia/conecta-logo.png')
 st.title('Análises Temporais')
 st.divider()
 
 # ---------- dados ----------
 
 df = load_data(
-    file_path=r'datasets\analises_temporais_simp.csv',
+    file_path=r'datasets/analises_temporais_simp.csv',
     dtype={'CEP':str, 'CEP_HOSP':str},
     date_cols=['DTCONSULT', 'DTDIAG', 'DTTRAT', 'DTULTINFO'],
 )

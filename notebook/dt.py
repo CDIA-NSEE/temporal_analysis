@@ -166,7 +166,7 @@ def estatisticas_ec(df, topo, drs, col):
     tudo_junto = pd.concat([geral, ec], axis=1)
 
     # Exibe o DataFrame resultante com as estatísticas compiladas
-    return tudo_junto
+    return tudo_junto.reset_index().rename(columns={'index': ' '})
 
 @st.cache_data(show_spinner="Gerando gráficos...")
 def boxplots_ec(df, topo, drs, col, x_title):

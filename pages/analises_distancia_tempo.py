@@ -107,8 +107,8 @@ resultados = características_drs(df, topografias[topo], estadiamento_clinico[es
 resultados_o = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'TRANSP')
 
 # ---------- métricas ----------
-st.divider()
 
+st.divider()
 
 if drs != None:
     st.header(f"DRS {drs}")
@@ -129,7 +129,7 @@ with e:
         st.metric(f":blue[Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
 with f:
     if drs != None:
-        st.metric(f":blue[Distância média para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Distância Média de Saída (km)']:,}".replace(',','.'))
+        st.metric(f":blue[Distância média para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Distância Média de Saída (km)']:,} km".replace(',','.'))
 
 st.divider()
 
@@ -168,7 +168,7 @@ st.divider()
 titulo_topo = f'todas as topografias' if topo == 'Todas' else topo
 titulo_drs = f'DRS {drs}' if drs != None else 'todas as DRS'
 
-st.subheader(f'Estatísticas por Estadiamento Clínico - {titulo_topo}, {titulo_drs}')
+st.subheader(f'Descrição por Estadiamento Clínico - {titulo_topo}, {titulo_drs}')
 st.write('\n\n')
 
 est_ec = estatisticas_ec(df, topografias[topo], drs, 'DISTANCIA_CARRO')

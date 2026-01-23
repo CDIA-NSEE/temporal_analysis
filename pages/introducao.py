@@ -10,28 +10,28 @@ integrantes = {
 
     "imt": {
 
+        "Vanderlei Cunha Parro": {
+            "descrição": "Doutor em Engenharia com consolidada trajetória em Engenharia de Sistemas, Instrumentação Astronômica e Ciência de Dados.",
+            "foto": "midia/vanderlei.jpg",
+            "orcid": "https://orcid.org/0000-0002-8232-0125",
+            "lattes": "http://lattes.cnpq.br/5302657052708622",
+            "linkedin": "https://www.linkedin.com/in/vparro/",
+        },
+
         "Lucas Buk Cardoso": {
-            "descrição": "Lucas Buk Cardoso é da Mauá",
+            "descrição": "Doutorando em Engenharia Elétrica. Lidera a participação do NSEE no projeto ConeCta-SP.",
             "foto": "midia/lucas.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0009-0003-0328-4803",
+            "lattes": "http://lattes.cnpq.br/5417608945198427",
             "linkedin": "https://www.linkedin.com/in/lucasbukcardoso/",
         },
 
         "Yasmin Pacheco Gil Bonilha": {
-            "descrição": "Yasmin Pacheco Gil Bonilha é da Mauá",
+            "descrição": "Graduanda em Ciência da Computação pelo IMT. Estagiária do NSEE, atuando no projeto ConeCta-SP.",
             "foto": "midia/yasmin.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0009-0001-6784-4078",
+            "lattes": "",
             "linkedin": "https://www.linkedin.com/in/yasminbonilha/",
-        },
-
-        "Vanderlei Cunha Parro": {
-            "descrição": "Vanderlei Cunha Parro é da Mauá",
-            "foto": "midia/vanderlei.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
-            "linkedin": "https://www.linkedin.com/in/vparro/",
         },
     
     },
@@ -39,26 +39,26 @@ integrantes = {
     "fsp": {
 
         "Tatiana Natasha Toporcov":{
-            "descrição":"Professora Associada da FSP-USP, coordenadora do projeto ConeCta-SP, com vasta experiência em epidemiologia do câncer e saúde pública.",
+            "descrição":"Professora Associada do Departamento de Epidemiologia da FSP-USP e pesquisadora principal do projeto ConeCta-SP.",
             "foto":"midia/tatiana.jpg",
             "orcid":"https://orcid.org/0000-0002-8929-5137",
-            "lattes":"https://bv.fapesp.br/pt/pesquisador/50437/tatiana-natasha-toporcov/",
+            "lattes":"http://lattes.cnpq.br/5345064895953228",
             "linkedin": "https://www.linkedin.com/in/tatiana-toporcov-6b94b3a/",
         },
 
         "Fernando Maia": {
-            "descrição": "Médico Sanitarista, doutor em Saúde Coletiva e pós-doutourando no projeto ConeCta-SP.",
+            "descrição": "Doutor em Saúde Coletiva. Pós-Doutorando em Epidemiologia do Câncer na FSP-USP, atuando no projeto ConeCta-SP.",
             "foto": "midia/fernando.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0000-0001-7227-9774",
+            "lattes": "http://lattes.cnpq.br/4778500596109672",
             "linkedin": "https://www.linkedin.com/in/fernando-maia-/",
         },
 
         "Simone Aldrey Angelo": {
-            "descrição": "Pesquisadora do projeto ConeCta-SP na área de Ciência de Dados e Inteligência Artificial aplicada à saúde.",
+            "descrição": "Doutora em Engenharia. Pesquisadora do projeto ConeCta-SP na área de Ciência de Dados e Inteligência Artificial aplicada à saúde, atuando no projeto ConeCta-SP.",
             "foto": "midia/simone.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0000-0001-9700-7986",
+            "lattes": "http://lattes.cnpq.br/4284294704799065",
             "linkedin": "https://www.linkedin.com/in/simoneangelo/",
         },
 
@@ -67,10 +67,10 @@ integrantes = {
     "fosp": {
 
         "Adeylson Guimarães Ribeiro": {
-            "descrição": "Subdiretor de Informação e Epidemiologia da FOSP.",
+            "descrição": "Doutor em Saúde Pública. Diretor Adjunto de Informação e Epidemiologia na FOSP.",
             "foto": "midia/adeylson.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0000-0001-8447-8463",
+            "lattes": "http://lattes.cnpq.br/4139571558376095",
             "linkedin": "https://www.linkedin.com/in/adeylson-ribeiro-phd-13169514/",
         },
 
@@ -79,18 +79,18 @@ integrantes = {
     "ac": {
 
         "Maria Paula Curado": {
-            "descrição": "Chefe do Grupo de Epidemiologia e Estatística em Câncer (GEECAN).",
+            "descrição": "Doutora em Oncologia. Chefe do Grupo de Epidemiologia e Estatística em Câncer (GEECAN).",
             "foto": "midia/maria_paula.jpg",
-            "orcid": "https://orcid.org/0000-0002-8929-5137",
-            "lattes": "https://orcid.org/0000-0002-8929-5137",
+            "orcid": "https://orcid.org/0000-0001-8172-2483",
+            "lattes": "http://lattes.cnpq.br/3397823736381748",
             "linkedin": "https://www.linkedin.com/in/maria-curado-54ba60105/",
         },
 
         "Gisele Aparecida Fernandes": {
-            "descrição": "Pesquisadora e Epidemiologista no A.C. Camargo Cancer Center.",
+            "descrição": "Doutora em Saúde Pública. Pesquisadora Científica no grupo de Epidemiologia e Estatística em Câncer do A.C. Camargo Cancer Center.",
             "foto": "midia/gisele.jpg",
-            "orcid": "",
-            "lattes": "",
+            "orcid": "https://orcid.org/0000-0002-5978-3279",
+            "lattes": "http://lattes.cnpq.br/0243509188105307",
             "linkedin": "https://www.linkedin.com/in/gisele-fernandes-0b289553/",
         },
 
@@ -119,57 +119,24 @@ st.write('\n\n')
 st.subheader('Integrantes do Projeto', divider='blue')
 st.write('\n\n')
 
-# ---------- imt ----------
+# ---------- instituições ----------
 
-st.subheader("Instituto Mauá de Tecnologia (IMT)")
+instituicoes = { "imt":"Núcleo de Sistemas Eletrônicos Embarcados do Instituto Mauá de Tecnologia (NSEE-IMT)", "fsp":"Faculdade de Saúde Pública da Universidade de São Paulo (FSP-USP)", "fosp":"Fundação Oncocentro de São Paulo (FOSP)", "ac":"A.C. Camargo Cancer Center (AC)"}
 
-for chave in integrantes["imt"].keys():
-    with st.popover(chave, type="tertiary"):
-        a, b = st.columns([1, 4])
-        with a:
-            st.image(integrantes["imt"][chave]["foto"], width=150)
-        with b:
-            st.write(integrantes["imt"][chave]["descrição"])
-            st.write(f"[Lattes]({integrantes['imt'][chave]['lattes']}) | [ORCID]({integrantes['imt'][chave]['orcid']}) | [LinkedIn]({integrantes['imt'][chave]['linkedin']})")
+for chave, valor in instituicoes.items():
 
-# ---------- fsp ----------
+    st.subheader(valor)
 
-st.subheader("Faculdade de Saúde Pública da Universidade de São Paulo (FSP-USP)")
+    for c in integrantes[chave].keys():
 
-for chave in integrantes["fsp"].keys():
-    with st.popover(chave, type="tertiary"):
-        a, b = st.columns([1, 4])
-        with a:
-            st.image(integrantes["fsp"][chave]["foto"], width=150)
-        with b:
-            st.write(integrantes["fsp"][chave]["descrição"])
-            st.write(f"[Lattes]({integrantes['fsp'][chave]['lattes']}) | [ORCID]({integrantes['fsp'][chave]['orcid']}) | [LinkedIn]({integrantes['fsp'][chave]['linkedin']})")
+        lattes_link = f"[Lattes]({integrantes[chave][c]['lattes']}) | " if integrantes[chave][c]["lattes"] else ""
+        orcid_link = f"[ORCID]({integrantes[chave][c]['orcid']}) | " if integrantes[chave][c]["orcid"] else ""
+        linkedin_link = f"[LinkedIn]({integrantes[chave][c]['linkedin']})" if integrantes[chave][c]["linkedin"] else ""
 
-# ---------- fosp ----------
-
-st.subheader("Informação e Epidemiologia - Fundação Oncocentro de São Paulo (FOSP)")
-
-
-for chave in integrantes["fosp"].keys():
-    with st.popover(chave, type="tertiary"):
-        a, b = st.columns([1, 4])
-        with a:
-            st.image(integrantes["fosp"][chave]["foto"], width=150)
-        with b:
-            st.write(integrantes["fosp"][chave]["descrição"])
-            st.write(f"[Lattes]({integrantes['fosp'][chave]['lattes']}) | [ORCID]({integrantes['fosp'][chave]['orcid']}) | [LinkedIn]({integrantes['fosp'][chave]['linkedin']})")
-
-# ---------- ac ----------
-
-st.subheader("Epidemiologia e Estatística em Câncer (GEECAN) - A.C. Camargo Cancer Center")
-
-for chave in integrantes["ac"].keys():
-    with st.popover(chave, type="tertiary"):
-        a, b = st.columns([1, 4])
-        with a:
-            st.image(integrantes["ac"][chave]["foto"], width=150)
-        with b:
-            st.write(integrantes["ac"][chave]["descrição"])
-            st.write(f"[Lattes]({integrantes['ac'][chave]['lattes']}) | [ORCID]({integrantes['ac'][chave]['orcid']}) | [LinkedIn]({integrantes['ac'][chave]['linkedin']})")
-
-
+        with st.popover(c, type="tertiary"):
+            a, b = st.columns([1, 4])
+            with a:
+                st.image(integrantes[chave][c]["foto"], width=150)
+            with b:
+                st.write(integrantes[chave][c]["descrição"])
+                st.write(f"{lattes_link}{orcid_link}{linkedin_link}")

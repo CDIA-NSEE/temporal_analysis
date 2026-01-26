@@ -1,6 +1,6 @@
 [theme]
-base="dark"
-primaryColor = "lightBlue"
+base="light"
+primaryColor = "blue"
 
 chartCategoricalColors = [
     "lightBlue",

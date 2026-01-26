@@ -3,6 +3,9 @@ from streamlit_carousel import carousel
 
 st.set_page_config(layout='wide', page_title='Introdução', page_icon='midia/conecta-logo.png')
 
+with st.container(horizontal_alignment='center'):
+    st.image("midia/conecta-banner.png", width='content')
+st.space(size='medium')
 st.title('Introdução')
 
 # ---------- dados ----------
@@ -98,12 +101,12 @@ integrantes = {
 
 }
 
-st.header('O Projeto ConeCta-SP', divider='blue')
+st.subheader('O Projeto ConeCta-SP')
 
 st.write('''
-        \t O Projeto **ConeCta-SP** (Controle do Câncer no Estado de São Paulo: do conhecimento à ação) é uma iniciativa sediada na Fundação Oncocentro de São Paulo (FOSP), com financiamento da FAPESP e da Secretaria de Estado da Saúde de São Paulo (SES/SP), reúne diversas instituições de referência em saúde pública, epidemiologia e tecnologia com o propósito de gerar conhecimento robusto e subsidiar ações de prevenção, controle e gestão do câncer no Sistema Único de Saúde (SUS).
+        \t Desenvolvida em parceria com a [Fundação Oncocentro de São Paulo (FOSP)](https://fosp.saude.sp.gov.br/), a [Faculdade de Saúde Pública da USP (FSP-USP)](https://www.fsp.usp.br/site/), o [Instituto Mauá de Tecnologia (IMT)](https://www.maua.br/) e o [AC Camargo Cancer Center](https://accamargo.org.br/), o projeto :orange[**ConeCta-SP** (Controle do Câncer no Estado de São Paulo: do conhecimento à ação)]  tem como objetivo aplicar métodos de pesquisa para a prevenção e controle do câncer no estado de São Paulo. A iniciativa tem financiamento da [Fundação de Amparo à Pesquisa do Estado de São Paulo (FAPESP)](https://fapesp.br/) e conta com a colaboração da [Agência Internacional para a Pesquisa em Câncer da Organização Mundial da Saúde (IARC/WHO)](https://www.iarc.who.int/).
          
-         No atual contexto de crescente incidência e mortalidade por câncer, o projeto está estruturado em dois eixos complementares de pesquisa e ação. Este site destina-se a divulgar e apresentar os estudos desenvolvidos no âmbito do Eixo 2 – **“Inteligência Artificial na predição de sobrevida de pacientes com câncer no período da epidemia da COVID-19 e anos não epidêmicos”** – realizados a partir da integração de informações do Registro Hospitalar de Câncer do Estado de São Paulo (RHC-SP) com metodologias avançadas de análise, em parceria com o Instituto Mauá de Tecnologia (IMT) e outras instituições acadêmicas e de pesquisa.
+         No atual contexto de crescente incidência e mortalidade por câncer, o projeto está estruturado em dois eixos complementares de pesquisa e ação. Este site destina-se a divulgar e apresentar os estudos desenvolvidos no âmbito do Eixo 2 – **“Inteligência Artificial na predição de sobrevida de pacientes com câncer no período da epidemia da COVID-19 e anos não epidêmicos”** – realizados a partir da integração de informações do Registro Hospitalar de Câncer do Estado de São Paulo (RHC-SP). Com metodologias avançadas de análise, têm o propósito de gerar conhecimento robusto e subsidiar ações de prevenção, controle e gestão do câncer no Sistema Único de Saúde (SUS).
 
 ''')
 
@@ -112,12 +115,11 @@ st.subheader('Nossos Objetivos')
 
 st.write('''
          
-         As investigações aqui descritas buscam explorar diferentes dimensões do cuidado oncológico, sempre respeitando os limites metodológicos e interpretativos dos dados disponíveis. Dessa forma, é possível não apenas descrever e interpretar padrões observados, mas também fornecer insumos que *possam apoiar decisões de políticas públicas, melhorar a coordenação dos serviços oncológicos e, em última instância, contribuir para a melhora dos resultados em saúde da população paulista*. A produção e a divulgação científica desses estudos objetivam ampliar a compreensão pública e técnica sobre o câncer e fortalecer as estratégias de prevenção e cuidado em saúde no estado.
+         As investigações aqui descritas buscam explorar diferentes dimensões do cuidado oncológico, sempre respeitando os limites metodológicos e interpretativos dos dados disponíveis. Dessa forma, é possível não apenas descrever e interpretar padrões observados, mas também fornecer insumos que *possam apoiar decisões de políticas públicas, melhorar a coordenação dos serviços oncológicos e, em última instância, contribuir para a melhora dos resultados em saúde da população paulista*. A produção e a divulgação científica desses trabalhos visam ampliar a compreensão pública e técnica sobre o câncer e fortalecer as estratégias de prevenção e cuidado em saúde no estado.
 ''')
 
-st.write('\n\n')
+st.space(size='small')
 st.subheader('Integrantes do Projeto', divider='blue')
-st.write('\n\n')
 
 # ---------- instituições ----------
 
@@ -125,6 +127,7 @@ instituicoes = { "imt":"Núcleo de Sistemas Eletrônicos Embarcados do Instituto
 
 for chave, valor in instituicoes.items():
 
+    st.space(size='small')
     st.subheader(valor)
 
     for c in integrantes[chave].keys():

@@ -22,25 +22,28 @@ def load_form(idx):
         return None
     
     with st.expander(f"Indivíduo {idx+1}", expanded=True):
-        nome = st.text_input(
-            "Nome",
-            key=f"nome_{idx}"
-        )
+        a, b = st.columns([0.9, 0.1])
 
-        idade = st.number_input(
-            "Idade",
-            min_value=0,
-            max_value=120,
-            key=f"idade_{idx}"
-        )
+        with a:
+            nome = st.text_input(
+                "Nome",
+                key=f"nome_{idx}"
+            )
 
-        score = st.slider(
-            "Score",
-            0, 100,
-            key=f"score_{idx}"
-        )
+            idade = st.number_input(
+                "Idade",
+                min_value=0,
+                max_value=120,
+                key=f"idade_{idx}"
+            )
 
-        delete = st.button(
+            score = st.slider(
+                "Score",
+                0, 100,
+                key=f"score_{idx}"
+            )
+        with b:
+            delete = st.button(
             ':red[:material/delete:]',
             type='tertiary',
             key=f"delete_{idx}"
@@ -54,11 +57,15 @@ def load_form(idx):
 
 # ---------- interface ----------
 
-if st.button(':orange[:material/add_circle: Adicionar Indivíduo]', type='tertiary'):
-    if len(st.session_state.individuos) < MAX_INDIVIDUOS:
-        st.session_state.individuos.append(len(st.session_state.individuos))
-    else:
-        st.warning(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.")
+with st.popover(':orange[:material/add_circle: Adicionar Indivíduos para Comparação]', type='tertiary'):
+    if st.button('Adicionar indivíduo manualmente', type='tertiary'):
+        if len(st.session_state.individuos) < MAX_INDIVIDUOS:
+            st.session_state.individuos.append(len(st.session_state.individuos))
+        else:
+            st.warning(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.")
+    
+    if st.button('Adicionar arquivo .csv', type='tertiary'):
+        st.write('implementing...')
 
 dados = []
 cols = st.columns(MAX_INDIVIDUOS)

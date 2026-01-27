@@ -14,7 +14,7 @@ integrantes = {
     "imt": {
 
         "Vanderlei Cunha Parro": {
-            "descrição": "Doutor em Engenharia com consolidada trajetória em Engenharia de Sistemas, Instrumentação Astronômica e Ciência de Dados.",
+            "descrição": "Doutor em Engenharia com consolidada trajetória em Engenharia de Sistemas, Instrumentação Astronômica e Ciência de Dados. Lidera o NSEE-IMT.",
             "foto": "midia/vanderlei.jpg",
             "orcid": "https://orcid.org/0000-0002-8232-0125",
             "lattes": "http://lattes.cnpq.br/5302657052708622",
@@ -22,7 +22,7 @@ integrantes = {
         },
 
         "Lucas Buk Cardoso": {
-            "descrição": "Doutorando em Engenharia Elétrica. Lidera a participação do NSEE no projeto ConeCta-SP.",
+            "descrição": "Doutorando em Engenharia Elétrica. Lidera a participação do NSEE-IMT no projeto ConeCta-SP.",
             "foto": "midia/lucas.jpg",
             "orcid": "https://orcid.org/0009-0003-0328-4803",
             "lattes": "http://lattes.cnpq.br/5417608945198427",
@@ -30,7 +30,7 @@ integrantes = {
         },
 
         "Yasmin Pacheco Gil Bonilha": {
-            "descrição": "Graduanda em Ciência da Computação pelo IMT. Estagiária do NSEE, atuando no projeto ConeCta-SP.",
+            "descrição": "Graduanda em Ciência da Computação pelo IMT. Estagiária do NSEE-IMT, atuando no projeto ConeCta-SP.",
             "foto": "midia/yasmin.jpg",
             "orcid": "https://orcid.org/0009-0001-6784-4078",
             "lattes": "",
@@ -58,7 +58,7 @@ integrantes = {
         },
 
         "Simone Aldrey Angelo": {
-            "descrição": "Doutora em Engenharia. Pesquisadora do projeto ConeCta-SP na área de Ciência de Dados e Inteligência Artificial aplicada à saúde, atuando no projeto ConeCta-SP.",
+            "descrição": "Doutora em Engenharia. Pesquisadora do projeto ConeCta-SP na área de Ciência de Dados e Inteligência Artificial aplicada à saúde.",
             "foto": "midia/simone.jpg",
             "orcid": "https://orcid.org/0000-0001-9700-7986",
             "lattes": "http://lattes.cnpq.br/4284294704799065",
@@ -115,11 +115,12 @@ st.subheader('Nossos Objetivos')
 
 st.write('''
          
-         As investigações aqui descritas buscam explorar diferentes dimensões do cuidado oncológico, sempre respeitando os limites metodológicos e interpretativos dos dados disponíveis. Dessa forma, é possível não apenas descrever e interpretar padrões observados, mas também fornecer insumos que *possam apoiar decisões de políticas públicas, melhorar a coordenação dos serviços oncológicos e, em última instância, contribuir para a melhora dos resultados em saúde da população paulista*. A produção e a divulgação científica desses trabalhos visam ampliar a compreensão pública e técnica sobre o câncer e fortalecer as estratégias de prevenção e cuidado em saúde no estado.
+         As investigações aqui descritas buscam explorar diferentes dimensões do cuidado oncológico, sempre respeitando os limites metodológicos e interpretativos dos dados disponíveis. Dessa forma, é possível não apenas descrever e interpretar padrões observados, mas também fornecer insumos que *possam apoiar decisões de políticas públicas, melhorar a coordenação dos serviços oncológicos e, em última instância, contribuir para a melhora dos resultados em saúde da população paulista*. A produção e a divulgação científica destes trabalhos visam ampliar a compreensão pública e técnica sobre o câncer e fortalecer as estratégias de prevenção e cuidado em saúde no estado.
 ''')
 
 st.space(size='small')
-st.subheader('Integrantes do Projeto', divider='blue')
+st.title('Integrantes do Projeto')
+st.subheader(' ', divider='blue')
 
 # ---------- instituições ----------
 

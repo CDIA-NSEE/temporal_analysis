@@ -126,7 +126,7 @@ with d:
         st.metric(f":orange[Pacientes que se tratam na DRS {drs}]", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
 with e:
     if drs != None:
-        st.metric(f":blue[Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Pacientes na Mesma DRS']:,}".replace(',','.'))
+        st.metric(f":blue[Pessoas que vão para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Qtd. na Principal DRS de Saída']:,}".replace(',','.'))
 with f:
     if drs != None:
         st.metric(f":blue[Distância média para a DRS {resultados['Principal DRS de Saida']}]", f"{resultados['Distância Média de Saída (km)']:,} km".replace(',','.'))

@@ -100,7 +100,7 @@ with st.form(key="filtros", enter_to_submit=True, border=True):
             submitted = st.form_submit_button("Aplicar Filtros", type='secondary')
 
     if submitted:
-        st.info('Filtros aplicados com sucesso!')
+        st.toast('Filtros aplicados com sucesso!', icon=':material/filter_list:', duration='short')
 
 
 resultados = características_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, 'CARRO')

@@ -3,11 +3,6 @@ from streamlit_carousel import carousel
 
 st.set_page_config(layout='wide', page_title='Introdução', page_icon='midia/conecta-logo.png')
 
-with st.container(horizontal_alignment='center'):
-    st.image("midia/conecta-banner.png", width='content')
-st.space(size='medium')
-st.title('Introdução')
-
 # ---------- dados ----------
 integrantes = {
 
@@ -101,26 +96,39 @@ integrantes = {
 
 }
 
-st.subheader('O Projeto ConeCta-SP')
+# ---------- página ----------
+
+with st.container(horizontal_alignment='center'):
+    st.image("midia/conecta-banner.png", width='content')
+st.space(size='medium')
+st.markdown('## :blue[Introdução]')
+
+st.markdown('### O Projeto ConeCta-SP')
 
 st.write('''
         \t Desenvolvida em parceria com a [Fundação Oncocentro de São Paulo (FOSP)](https://fosp.saude.sp.gov.br/), a [Faculdade de Saúde Pública da USP (FSP-USP)](https://www.fsp.usp.br/site/), o [Instituto Mauá de Tecnologia (IMT)](https://www.maua.br/) e o [AC Camargo Cancer Center](https://accamargo.org.br/), o projeto :orange[**ConeCta-SP** (Controle do Câncer no Estado de São Paulo: do conhecimento à ação)]  tem como objetivo aplicar métodos de pesquisa para a prevenção e controle do câncer no estado de São Paulo. A iniciativa tem financiamento da [Fundação de Amparo à Pesquisa do Estado de São Paulo (FAPESP)](https://fapesp.br/) e conta com a colaboração da [Agência Internacional para a Pesquisa em Câncer da Organização Mundial da Saúde (IARC/WHO)](https://www.iarc.who.int/).
          
          No atual contexto de crescente incidência e mortalidade por câncer, o projeto está estruturado em dois eixos complementares de pesquisa e ação. Este site destina-se a divulgar e apresentar os estudos desenvolvidos no âmbito do Eixo 2 – **“Inteligência Artificial na predição de sobrevida de pacientes com câncer no período da epidemia da COVID-19 e anos não epidêmicos”** – realizados a partir da integração de informações do Registro Hospitalar de Câncer do Estado de São Paulo (RHC-SP). Com metodologias avançadas de análise, têm o propósito de gerar conhecimento robusto e subsidiar ações de prevenção, controle e gestão do câncer no Sistema Único de Saúde (SUS).
 
+         As finalidades do subprojeto incluem: 
+         - Avaliar a precisão de diferentes algoritmos de IA na predição de sobrevida de pacientes diagnosticados entre 2000 e 2019, identificando o que possui melhor desempenho para os cinco tipos de câncer mais frequentes.
+         - Comparar a eficácia dos modelos de IA com modelos estatísticos comuns para predição de sobrevida.
+         - Estimar a sobrevida esperada de pacientes diagnosticados nos anos de 2020/2021, a fim de:
+            - analisar a diferença entre a sobrevida real e a esperada nos anos pandêmicos;
+            - verificar os efeitos da pandemia de COVID-19 no prognóstico do câncer.
+
 ''')
 
 st.write('\n\n')
-st.subheader('Nossos Objetivos')
+st.markdown('### Nossos Objetivos')
 
 st.write('''
          
          As investigações aqui descritas buscam explorar diferentes dimensões do cuidado oncológico, sempre respeitando os limites metodológicos e interpretativos dos dados disponíveis. Dessa forma, é possível não apenas descrever e interpretar padrões observados, mas também fornecer insumos que *possam apoiar decisões de políticas públicas, melhorar a coordenação dos serviços oncológicos e, em última instância, contribuir para a melhora dos resultados em saúde da população paulista*. A produção e a divulgação científica destes trabalhos visam ampliar a compreensão pública e técnica sobre o câncer e fortalecer as estratégias de prevenção e cuidado em saúde no estado.
 ''')
 
-st.space(size='small')
-st.title('Integrantes do Projeto')
-st.subheader(' ', divider='blue')
+st.divider()
+st.markdown('## :blue[Integrantes do Projeto]')
 
 # ---------- instituições ----------
 
@@ -128,8 +136,7 @@ instituicoes = { "imt":"Núcleo de Sistemas Eletrônicos Embarcados do Instituto
 
 for chave, valor in instituicoes.items():
 
-    st.space(size='small')
-    st.subheader(valor)
+    st.markdown(f'#### {valor}')
 
     for c in integrantes[chave].keys():
 

@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_carousel import carousel
 
 st.set_page_config(layout='wide', page_title='Introdução', page_icon='midia/conecta-logo.png')
 

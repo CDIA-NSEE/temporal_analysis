@@ -86,11 +86,21 @@ if st.session_state.visibilidade_container:
 # ---------- formulário manual ----------
 
 if st.session_state.visibilidade_manual:
-    if st.button(':orange[:material/add_circle: Adicionar novo indivíduo]', type='secondary') and len(st.session_state.individuos) < MAX_INDIVIDUOS:
-        st.session_state.individuos.append(str(uuid.uuid4()))
-    else:
-        if len(st.session_state.individuos) == MAX_INDIVIDUOS:
-            st.toast(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.", icon=':material/warning:', duration=2)
+
+    a, b = st.columns([0.01, 0.99])
+
+    with a:
+        if st.button(':material/chevron_backward:', type='tertiary'):
+            st.session_state.visibilidade_manual = False
+            st.session_state.visibilidade_container = True
+            st.rerun()
+    
+    with b:
+        if st.button(':orange[:material/add_circle: Adicionar novo indivíduo]', type='secondary') and len(st.session_state.individuos) < MAX_INDIVIDUOS:
+            st.session_state.individuos.append(str(uuid.uuid4()))
+        else:
+            if len(st.session_state.individuos) == MAX_INDIVIDUOS:
+                st.toast(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.", icon=':material/warning:', duration=2)
 
     dados = []
     cols = st.columns(MAX_INDIVIDUOS)
@@ -150,8 +160,18 @@ if st.session_state.visibilidade_csv:
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sobrevida.csv">aqui</a>'
 
-    with st.container(horizontal_alignment='center'):
-        st.markdown(f" :blue-background[ :blue[:material/info:] **Baixe o modelo de arquivo .csv {href} e faça o upload do arquivo preenchido.** ]", unsafe_allow_html=True)
+    
+    a, b = st.columns([0.01, 0.99])
+
+    with a:
+        if st.button(':material/chevron_backward:', type='tertiary'):
+            st.session_state.visibilidade_csv = False
+            st.session_state.visibilidade_container = True
+            st.rerun()
+    
+    with b:
+        with st.container(horizontal_alignment='center'):
+            st.markdown(f" :blue-background[ :blue[:material/info:] **Baixe o modelo de arquivo .csv {href} e faça o upload do arquivo preenchido.** ]", unsafe_allow_html=True)
 
     st.space(size='small')
 

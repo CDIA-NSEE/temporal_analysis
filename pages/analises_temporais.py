@@ -131,6 +131,7 @@ st.line_chart(data=casos_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'{
 
 
 #---------- Integrais e Derivadas ----------
+
 st.divider()
 st.subheader('Características da Distribuição Temporal')
 
@@ -151,7 +152,7 @@ st.write('\n')
 st.divider()
 st.write('\n')
 st.write('\n')
-st.title('Testes de Recorrência')
+st.markdown(' ## :blue[Testes de Recorrência]')
 st.write('\n')
 st.write('\n')
 

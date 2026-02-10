@@ -113,7 +113,7 @@ def describe_por_drs(df):
         print(col)  # Imprime o nome da coluna que está sendo processada
         # Agrupa por 'DRS' e aplica describe() na coluna atual, arredondando para 2 casas decimais,
         # em seguida exibe o resultado (display é útil em notebooks para formatação)
-        display(df.groupby('DRS')[col].describe().round(2))
+        # display(df.groupby('DRS')[col].describe().round(2))
         print('\n\n')  # Quebra de linhas para separar visualmente os blocos de saída
 
 def top_distancias_por_drs(df):#, n_pacientes=10):
@@ -140,7 +140,7 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
     # Itera por cada DRS único na tabela df_drs e mostra uma visão superior e inferior de cada grupo
     for drs in df_drs.DRS.unique():
         print(f'DRS {drs}')                           # Imprime o identificador do DRS atual como cabeçalho
-        display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
+        # display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
         print()                                       # Linha em branco para separar visualmente os blocos de saída
 
 @st.cache_data(show_spinner="Calculando estatísticas...")

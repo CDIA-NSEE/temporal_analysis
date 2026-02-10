@@ -3,6 +3,8 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 
+# ---------- funções do notebook do colab ----------
+
 def tratamento_por_drs(df):
 
     # Total de pacientes por DRS de residência
@@ -143,8 +145,79 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
         # display(df_drs[df_drs.DRS == drs])            # Mostra o subconjunto inteiro
         print()                                       # Linha em branco para separar visualmente os blocos de saída
 
+# ---------- funções para o streamlit ----------
+
+@st.cache_data(show_spinner="Calculando métricas...")
+def caracteristicas_drs(df, topo, ec, drs, drs_col, col):
+
+    df = df.copy()
+
+    #seleção das topografias escolhidas
+    df = df[df['TOPOGRUP'].isin(topo)]
+
+    #seleciona o estadiamento clínico especificado
+    df = df[df['ECGRUP'].isin(ec)]
+
+    # #seleção das DRS escolhidas
+    if drs is not None:
+        if type(drs) == list:
+            df = df[df[drs_col].isin(drs)]
+        else:
+            df = df[df[drs_col] == drs]
+    
+    # ----- processamento da DRS externa mais popular -----
+    externa_popular = (
+        df[df['DRS'] != df['DRS_INST']]
+        .groupby(['DRS','DRS_INST'])
+        .size()
+        .rename('qtd')
+        .reset_index()
+    )
+    externa_top = (
+        externa_popular
+        .sort_values(['DRS','qtd'], ascending=[True, False])
+        .groupby("DRS")
+        .first()
+        .rename(columns={'DRS_INST': 'top_DRS_ext', 'qtd': 'qtd_princ_DRS_ext'})
+    )
+
+    # ----- processamento da distância média para a DRS externa principal -----
+    drs_ext_princ = externa_top['top_DRS_ext'].values[0]
+    df_princ_ext = df[(df['DRS'] != df['DRS_INST']) & (df['DRS_INST'] == drs_ext_princ)]
+    media_dist_principal = round(df_princ_ext[f'DISTANCIA_{col}'].mean(), 2)
+
+    # ----- processamento das métricas gerais -----
+    nome_drs = f'DRS {drs}' if type(drs) == int else 'Interior' if type(drs) == list else 'todas as DRS'
+    nome_topo = f'todas as topografias' if len(topo) == 7 else topo
+    metricas = True if type(drs) == int and drs_col == 'DRS' else False
+    total_pacientes = df.shape[0]
+    dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
+    dist_mediana = round(df[f'DISTANCIA_{col}'].median(), 2)
+    tempo_medio = round(df[f'TEMPO_{col}'].mean())
+    tempo_mediano = round(df[f'TEMPO_{col}'].median())
+    mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
+
+    resultados = {
+        'nome_drs': nome_drs,
+        'nome_topo': nome_topo,
+        'drs_col': drs_col,
+        'metricas': metricas,
+        'transp': col,
+        'total_pacientes': total_pacientes,
+        'dist_media': dist_media,
+        'dist_mediana': dist_mediana,
+        'tempo_medio': tempo_medio,
+        'tempo_mediano': tempo_mediano,
+        'mesma_drs': mesma_drs,
+        'principal_drs_saida': externa_top['top_DRS_ext'].values[0],
+        'qtd_princ_drs_saida': externa_top['qtd_princ_DRS_ext'].values[0],
+        'dist_media_principal': media_dist_principal
+    }
+
+    return resultados
+
 @st.cache_data(show_spinner="Calculando estatísticas...")
-def estatisticas_ec(df, topo, drs, col):
+def estatisticas_ec(df, topo, drs, drs_col, col):
 
     df = df.copy()
 
@@ -153,7 +226,10 @@ def estatisticas_ec(df, topo, drs, col):
 
     # #seleção das DRS escolhidas
     if drs is not None:
-        df = df[df['DRS'] == drs]
+            if type(drs) == list:
+                df = df[df[drs_col].isin(drs)]
+            else:
+                df = df[df[drs_col] == drs]
 
     # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
     # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
@@ -169,7 +245,7 @@ def estatisticas_ec(df, topo, drs, col):
     return tudo_junto.reset_index().rename(columns={'index': ' '})
 
 @st.cache_data(show_spinner="Gerando gráficos...")
-def boxplots_ec(df, topo, drs, col, x_title):
+def boxplots_ec(df, topo, drs, drs_col, col, x_title):
 
     df = df.copy()
 
@@ -178,7 +254,10 @@ def boxplots_ec(df, topo, drs, col, x_title):
 
     # #seleção das DRS escolhidas
     if drs is not None:
-        df = df[df['DRS'] == drs]
+        if type(drs) == list:
+            df = df[df[drs_col].isin(drs)]
+        else:
+            df = df[df[drs_col] == drs]
 
     fig = go.Figure()
 
@@ -209,61 +288,6 @@ def boxplots_ec(df, topo, drs, col, x_title):
 
     return fig
 
-@st.cache_data(show_spinner="Calculando métricas...")
-def características_drs(df, topo, ec, drs, col):
-
-    df = df.copy()
-
-    #seleção das topografias escolhidas
-    df = df[df['TOPOGRUP'].isin(topo)]
-
-    #seleciona o estadiamento clínico especificado
-    df = df[df['ECGRUP'].isin(ec)]
-
-    # #seleção das DRS escolhidas
-    if drs is not None:
-        df = df[df['DRS'] == drs]
-    
-    total_pacientes = df.shape[0]
-    dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
-    dist_mediana = round(df[f'DISTANCIA_{col}'].median(), 2)
-    tempo_medio = round(df[f'TEMPO_{col}'].mean())
-    tempo_mediano = round(df[f'TEMPO_{col}'].median())
-    mesma_drs = df[df['DRS'] == df['DRS_INST']].shape[0]
-
-    externa_popular = (
-        df[df['DRS'] != df['DRS_INST']]
-        .groupby(['DRS','DRS_INST'])
-        .size()
-        .rename('qtd')
-        .reset_index()
-    )
-
-    externa_top = (
-        externa_popular
-        .sort_values(['DRS','qtd'], ascending=[True, False])
-        .groupby("DRS")
-        .first()
-        .rename(columns={'DRS_INST': 'top_DRS_ext', 'qtd': 'qtd_princ_DRS_ext'})
-    )
-
-    drs_ext_princ = externa_top['top_DRS_ext'].values[0]
-    df_princ_ext = df[(df['DRS'] != df['DRS_INST']) & (df['DRS_INST'] == drs_ext_princ)]
-    media_dist_principal = round(df_princ_ext[f'DISTANCIA_{col}'].mean(), 2)
-
-    resultados = {
-        'Total de Pacientes': total_pacientes,
-        'Distância Média (km)': dist_media,
-        'Distância Mediana (km)': dist_mediana,
-        'Tempo Médio (min)': tempo_medio,
-        'Tempo Mediano (min)': tempo_mediano,
-        'Pacientes na Mesma DRS': mesma_drs,
-        'Principal DRS de Saida': externa_top['top_DRS_ext'].values[0],
-        'Qtd. na Principal DRS de Saída': externa_top['qtd_princ_DRS_ext'].values[0],
-        'Distância Média de Saída (km)': media_dist_principal
-    }
-
-    return resultados
 
 
 

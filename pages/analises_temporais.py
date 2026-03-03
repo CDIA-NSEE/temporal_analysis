@@ -13,6 +13,7 @@ st.divider()
 
 # ---------- dados ----------
 
+#o dataset utilizado para as análises desta página se encontra disponível no notebook 'Modelos para cada tipo.ipynb', na pasta 'Cenários' (Banco de dados único simplificado - análises temporais).
 df = load_data(
     file_path=r'datasets/analises_temporais_simp.csv',
     dtype={'CEP':str, 'CEP_HOSP':str},

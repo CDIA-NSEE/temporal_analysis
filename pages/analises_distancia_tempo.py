@@ -10,6 +10,7 @@ st.title('Análises de Distâncias e Tempos')
 
 # ---------- dados ----------
 
+#o dataset utilizado para as análises desta página se encontra disponível no notebook 'Modelos para cada tipo.ipynb', na pasta 'Cenários' (Banco de dados único simplificado - distâncias e tempos).
 df = load_data(
     file_path=r'datasets/dt_simp.csv', 
     dtype={'CEP':str, 'CEP_HOSP':str},

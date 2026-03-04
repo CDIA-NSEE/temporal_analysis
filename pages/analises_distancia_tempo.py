@@ -103,7 +103,7 @@ with analises:
     # ---------- formulário ----------
 
     with st.container(horizontal=True, horizontal_alignment="left"):
-        st.write(':blue-badge[Confirmação microscópica] :green-badge[Mais de 19 anos] :orange-badge[Atendidos no SUS]')
+        st.write(':small[Pacientes com] :blue-badge[Confirmação microscópica] :green-badge[Mais de 19 anos] :orange-badge[Atendidos no SUS] :violet-badge[Atendimento em CACONs ou UNACONs]')
 
 
 
@@ -194,3 +194,42 @@ with analises:
     # st.write('\n')
     # deck = load_map_pydeck()
     # st.pydeck_chart(deck)
+
+with metod:
+   st.markdown('O banco de dados utilizado para as análises desta página foi manipulado da seguinte forma:')
+
+   # seleções gerais
+   st.subheader(':blue[Seleções Clínicas]', divider='blue')
+   st.markdown('##### **:blue[Gerais]**')
+   st.markdown(' - Retirada de morfologias com final *2* ou *9*;')
+   st.write('Pacientes com:')
+   with st.container(horizontal=True):
+       st.space('small')
+       st.markdown(' - Confirmação microscópica; \n - Mais de 19 anos; \n - Atendidos no SUS; \n - Atendimento em CACONs ou UNACONs;')
+
+   # selecões específicas
+   st.markdown('##### **:blue[Específicas]**')
+
+   with st.expander('Próstata', expanded=False):
+       st.markdown(' - Topografia *C61*')
+    
+   with st.expander('Pulmão', expanded=False):
+       st.markdown(' - Topografia *C34*; \n - Pacientes sem recebimento de hormonioterapia')
+
+   with st.expander('Mama', expanded=False):
+       st.markdown(' - Topografia *C50*; \n - Pacientes do sexo feminino')
+
+   with st.expander('Colorretal', expanded=False):
+       st.markdown(' - Topografia *C18*, *C19* ou *C20*; \n - Morfologia *81403*')
+    
+   with st.expander('Colo do Útero', expanded=False):
+       st.markdown(' - Topografia *C53*')
+
+   # manipulação dos dados de distâncias e tempos
+   st.space('small')
+   st.subheader(':orange[Manipulação dos dados de Distâncias e Tempos]', divider='orange')
+   st.markdown('As informações relativas aos CEPs dos pacientes, ainda que anonimizadas, foram obtidas mediante aprovação do Comitê de Ética da Faculdade de Saúde Pública da Universidade de São Paulo (FSP-USP). As distâncias entre os CEPs residenciais e hospitalares para todos os CEPs válidos foram calculadas através da [API Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/overview?hl=pt-br), do *Google Maps Platform*, utilizando o método de transporte `\'driving\'` como padrão. Os pacientes cujo trajeto não pode ser encontrado pela API foram retirados da base de dados.')
+
+
+
+

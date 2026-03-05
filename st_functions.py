@@ -19,6 +19,29 @@ def load_data(file_path: str, dtype: dict, date_cols: list) -> pd.DataFrame:
     
     return df
 
+
+# ---------- filtro dos dados ----------
+
+@st.cache_data()
+def filter_data(df, topo, ec, drs, drs_col):
+   
+   df = df.copy()
+
+    #seleção das topografias escolhidas
+   df = df[df['TOPOGRUP'].isin(topo)]
+
+    #seleciona o estadiamento clínico especificado
+   df = df[df['ECGRUP'].isin(ec)]
+
+    # #seleção das DRS escolhidas
+   if drs is not None:
+       if type(drs) == list:
+            df = df[df[drs_col].isin(drs)]
+       else:
+            df = df[df[drs_col] == drs]
+            
+   return df
+
 # ---------- funções para carregamento do mapa ----------
 
 def geometrycollection_to_multipolygon(geometry_collection):

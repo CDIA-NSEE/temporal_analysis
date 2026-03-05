@@ -1,6 +1,6 @@
 from numpy import dtype
 import streamlit as st
-from st_functions import load_data, load_map_pydeck
+from st_functions import filter_data, load_data, load_map_pydeck
 from streamlit_folium import st_folium
 from notebook.dt import caracteristicas_drs, estatisticas_ec, boxplots_ec
 
@@ -105,9 +105,6 @@ with analises:
     with st.container(horizontal=True, horizontal_alignment="left"):
         st.write(':small[Pacientes com] :blue-badge[Confirmação microscópica] :green-badge[Mais de 19 anos] :orange-badge[Atendidos no SUS] :violet-badge[Atendimento em CACONs ou UNACONs]')
 
-
-
-
     with st.form(key="filtros", enter_to_submit=True, border=True):
         estadiamento = st.pills(
                 label='Estadiamento Clínico',
@@ -150,8 +147,9 @@ with analises:
             st.toast('Filtros aplicados com sucesso!', icon=':material/filter_list:', duration='short')
 
 
-    resultados = caracteristicas_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, t_drs, 'CARRO')
-    resultados_o = caracteristicas_drs(df, topografias[topo], estadiamento_clinico[estadiamento], drs, t_drs, 'TRANSP')
+    fdf = filter_data(df, topografias[topo], estadiamento_clinico[estadiamento], drs, t_drs)
+    resultados = caracteristicas_drs(fdf, drs, t_drs, 'CARRO')
+    resultados_o = caracteristicas_drs(fdf, drs, t_drs, 'TRANSP')
 
     # ---------- métricas ----------
 
@@ -173,10 +171,10 @@ with analises:
 
     # ---------- tabela - estatísticas por estadiamento clínico----------
 
-    st.subheader(f'Descrição por Estadiamento Clínico - {resultados['nome_topo']}, {resultados['nome_drs']}')
+    st.subheader(f'Descrição por Estadiamento Clínico - {topo}, {resultados['nome_drs']}')
     st.write('\n\n')
 
-    est_ec = estatisticas_ec(df, topografias[topo], drs, t_drs, 'DISTANCIA_CARRO')
+    est_ec = estatisticas_ec(fdf, 'DISTANCIA_CARRO')
     st.dataframe(
         est_ec,
         hide_index=True,
@@ -184,8 +182,8 @@ with analises:
 
     # ---------- boxplots ----------
     st.space('medium')
-    st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {resultados['nome_topo']}, {resultados['nome_drs']}')
-    boxplots = boxplots_ec(df, topografias[topo], drs, t_drs, 'DISTANCIA_CARRO', 'Estadiamento Clínico')
+    st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {topo}, {resultados['nome_drs']}')
+    boxplots = boxplots_ec(fdf, estadiamento_clinico[estadiamento], 'DISTANCIA_CARRO', 'Estadiamento Clínico')
     st.plotly_chart(boxplots)
 
     # ---------- mapa ----------

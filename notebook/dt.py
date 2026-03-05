@@ -148,22 +148,9 @@ def top_distancias_por_drs(df):#, n_pacientes=10):
 # ---------- funções para o streamlit ----------
 
 @st.cache_data(show_spinner="Calculando métricas...")
-def caracteristicas_drs(df, topo, ec, drs, drs_col, col):
+def caracteristicas_drs(df, drs, drs_col, col):
 
     df = df.copy()
-
-    #seleção das topografias escolhidas
-    df = df[df['TOPOGRUP'].isin(topo)]
-
-    #seleciona o estadiamento clínico especificado
-    df = df[df['ECGRUP'].isin(ec)]
-
-    # #seleção das DRS escolhidas
-    if drs is not None:
-        if type(drs) == list:
-            df = df[df[drs_col].isin(drs)]
-        else:
-            df = df[df[drs_col] == drs]
     
     # ----- processamento da DRS externa mais popular -----
     externa_popular = (
@@ -188,7 +175,6 @@ def caracteristicas_drs(df, topo, ec, drs, drs_col, col):
 
     # ----- processamento das métricas gerais -----
     nome_drs = f'DRS {drs}' if type(drs) == int else 'Interior' if type(drs) == list else 'todas as DRS'
-    nome_topo = f'todas as topografias' if len(topo) == 7 else topo
     metricas = True if type(drs) == int and drs_col == 'DRS' else False
     total_pacientes = df.shape[0]
     dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
@@ -199,7 +185,6 @@ def caracteristicas_drs(df, topo, ec, drs, drs_col, col):
 
     resultados = {
         'nome_drs': nome_drs,
-        'nome_topo': nome_topo,
         'drs_col': drs_col,
         'metricas': metricas,
         'transp': col,
@@ -217,19 +202,9 @@ def caracteristicas_drs(df, topo, ec, drs, drs_col, col):
     return resultados
 
 @st.cache_data(show_spinner="Calculando estatísticas...")
-def estatisticas_ec(df, topo, drs, drs_col, col):
+def estatisticas_ec(df, col):
 
     df = df.copy()
-
-    #seleção das topografias escolhidas
-    df = df[df['TOPOGRUP'].isin(topo)]
-
-    # #seleção das DRS escolhidas
-    if drs is not None:
-            if type(drs) == list:
-                df = df[df[drs_col].isin(drs)]
-            else:
-                df = df[df[drs_col] == drs]
 
     # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
     # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
@@ -245,32 +220,22 @@ def estatisticas_ec(df, topo, drs, drs_col, col):
     return tudo_junto.reset_index().rename(columns={'index': ' '})
 
 @st.cache_data(show_spinner="Gerando gráficos...")
-def boxplots_ec(df, topo, drs, drs_col, col, x_title):
+def boxplots_ec(df, est, col, x_title):
 
     df = df.copy()
-
-    #seleção das topografias escolhidas
-    df = df[df['TOPOGRUP'].isin(topo)]
-
-    # #seleção das DRS escolhidas
-    if drs is not None:
-        if type(drs) == list:
-            df = df[df[drs_col].isin(drs)]
-        else:
-            df = df[df[drs_col] == drs]
-
     fig = go.Figure()
 
     # Caixa geral (toda a amostra) representada como a categoria "Geral" no eixo y — orientada horizontalmente
-    fig.add_trace(go.Box(
-        x=df[col],  # valores da variável selecionada
-        y=['Geral'] * len(df),  # repete a etiqueta "Geral" para cada ponto, para posicionar a caixa no eixo y
-        name='Geral',
-        orientation='h',  # orientação horizontal
-    ))
+    if len(est) != 1:
+        fig.add_trace(go.Box(
+            x=df[col],  # valores da variável selecionada
+            y=['Geral'] * len(df),  # repete a etiqueta "Geral" para cada ponto, para posicionar a caixa no eixo y
+            name='Geral',
+            orientation='h',  # orientação horizontal
+        ))
 
     # Caixas por estágio clínico (ECGRUP) — cada uma como uma linha horizontal separada
-    for g in ['I', 'II', 'III', 'IV']:
+    for g in est:
         vals = df.loc[df['ECGRUP'] == g, col]  # seleciona os valores da coluna para o grupo ECGRUP = g
         fig.add_trace(go.Box(
             x=vals,  # valores do grupo

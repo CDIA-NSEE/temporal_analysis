@@ -171,7 +171,9 @@ with analises:
 
     # ---------- tabela - estatísticas por estadiamento clínico----------
 
-    st.subheader(f'Descrição por Estadiamento Clínico - {topo}, {resultados['nome_drs']}')
+    titulo_ec = 'Todos os Estadiamentos Clínicos' if estadiamento == 'Todos' else f'Estadiamento Clínico {estadiamento}'
+    
+    st.subheader(f'Descrição por {titulo_ec}, {topo}, {resultados['nome_drs']}')
     st.write('\n\n')
 
     est_ec = estatisticas_ec(fdf, 'DISTANCIA_CARRO')
@@ -182,7 +184,7 @@ with analises:
 
     # ---------- boxplots ----------
     st.space('medium')
-    st.subheader(f'Boxplots de Distância por Estadiamento Clínico - {topo}, {resultados['nome_drs']}')
+    st.subheader(f'Boxplots de Distância por {titulo_ec}, {topo}, {resultados['nome_drs']}')
     boxplots = boxplots_ec(fdf, estadiamento_clinico[estadiamento], 'DISTANCIA_CARRO', 'Estadiamento Clínico')
     st.plotly_chart(boxplots)
 

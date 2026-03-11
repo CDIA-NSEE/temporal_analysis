@@ -174,7 +174,7 @@ def caracteristicas_drs(df, drs, drs_col, col):
     media_dist_principal = round(df_princ_ext[f'DISTANCIA_{col}'].mean(), 2)
 
     # ----- processamento das métricas gerais -----
-    nome_drs = f'DRS {drs}' if type(drs) == int else 'Interior' if type(drs) == list else 'todas as DRS'
+    nome_drs = f'DRS {drs}' if type(drs) == int else 'Interior' if type(drs) == list else 'Todas as DRS'
     metricas = True if type(drs) == int and drs_col == 'DRS' else False
     total_pacientes = df.shape[0]
     dist_media = round(df[f'DISTANCIA_{col}'].mean(), 2)
@@ -206,18 +206,19 @@ def estatisticas_ec(df, col):
 
     df = df.copy()
 
-    # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
-    # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
-    geral = df[col].describe().round(2).rename('Geral')
-
     # Estatísticas descritivas agrupadas por estágio clínico (ECGRUP)
     # Aplica describe() por grupo, arredonda para 2 casas e transpõe para facilitar a concatenação
     ec = df.groupby('ECGRUP')[col].describe().round(2).T
-    # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
-    tudo_junto = pd.concat([geral, ec], axis=1)
+
+    if set(df['ECGRUP']) == {'I', 'II', 'III', 'IV'}:
+        # Estatísticas descritivas gerais para toda a coluna (média, mediana, std, min, max, etc.)
+        # Arredonda os valores para 2 casas decimais e renomeia a série para 'Geral'
+        geral = df[col].describe().round(2).rename('Geral')
+        # Concatena as estatísticas gerais e as estatísticas por ECGRUP lado a lado (por colunas)
+        ec = pd.concat([geral, ec], axis=1)
 
     # Exibe o DataFrame resultante com as estatísticas compiladas
-    return tudo_junto.reset_index().rename(columns={'index': ' '})
+    return ec.reset_index().rename(columns={'index': ' '})
 
 @st.cache_data(show_spinner="Gerando gráficos...")
 def boxplots_ec(df, est, col, x_title):

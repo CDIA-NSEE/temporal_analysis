@@ -3,6 +3,7 @@ import streamlit as st
 from st_functions import filter_data, load_data, load_map_pydeck
 from streamlit_folium import st_folium
 from notebook.dt import caracteristicas_drs, estatisticas_ec, boxplots_ec
+from config.constants import TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT 
 
 st.set_page_config(layout='wide', page_title='Análises de Distâncias e Tempos', page_icon='midia/conecta-logo.png')
 
@@ -19,46 +20,12 @@ df = load_data(
 
 topografias = {
     'Todas': ['C18', 'C19', 'C20', 'C34', 'C50', 'C53', 'C61'],
-    'Próstata': ['C18', 'C19', 'C20'],
-    'Pulmão': ['C34'],
-    'Mama': ['C50'],
-    'Colo do Útero': ['C53'],
-    'Colorretal': ['C61']
+    **TOPOGRAFIAS
     }
 
 estadiamento_clinico = {
     'Todos': ['I', 'II', 'III', 'IV'],
-    'I': ['I'],
-    'II':['II'],
-    'III':['III'],
-    'IV':['IV']
-}
-
-tipo_drs = {
-    'DRS de Residência': 'DRS',
-    'DRS de Hospital': 'DRS_INST',
-}
-
-drs_dict = {
-    "Capital": 1,
-    "Interior": [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
-    "DRS 1 - Grande São Paulo": 1,
-    "DRS 2 - Araçatuba": 2,
-    "DRS 3 - Araraquara": 3,
-    "DRS 4 - Baixada Santista": 4,
-    "DRS 5 - Barretos": 5,
-    "DRS 6 - Bauru": 6,
-    "DRS 7 - Campinas": 7,
-    "DRS 8 - Franca": 8,
-    "DRS 9 - Marília": 9,
-    "DRS 10 - Piracicaba": 10,
-    "DRS 11 - Presidente Prudente": 11,
-    "DRS 12 - Registro": 12,
-    "DRS 13 - Ribeirão Preto": 13,
-    "DRS 14 - São João da Boa Vista": 14,
-    "DRS 15 - São José do Rio Preto": 15,
-    "DRS 16 - Sorocaba": 16,
-    "DRS 17 - Taubaté": 17
+    **ESTADIAMENTO_CLINICO
 }
 
 # ---------- funções de exibição ----------
@@ -120,20 +87,20 @@ with analises:
 
         d = st.radio(
             label='DRS de Residência ou de Hospital',
-            options=tipo_drs.keys(),
+            options=TIPO_DRS.keys(),
             horizontal=True,
             label_visibility='collapsed',
             index = 0,
         )
-        t_drs = tipo_drs[d]
+        t_drs = TIPO_DRS[d]
 
         drs = st.selectbox(
             label='DRS',
-            options=drs_dict.keys(),
+            options=DRS_DICT.keys(),
             placeholder=f'Selecione a DRS desejada',
             index=None,
         )
-        drs = drs_dict[drs] if drs != None else None
+        drs = DRS_DICT[drs] if drs != None else None
 
         st.write('\n')
 

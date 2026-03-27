@@ -5,6 +5,7 @@ from notebook import at as nb
 import matplotlib.pyplot as plt
 from pyunicorn.timeseries import RecurrencePlot
 from sklearn.preprocessing import MinMaxScaler
+from config.constants import TIPOS_GRAFICO, CARACTERISTICAS, PERIODOS_TEMPO, TOPOGRAFIAS, ESTADIAMENTO_CLINICO
 
 
 st.set_page_config(layout='wide', page_title='Análises Temporais', page_icon='midia/conecta-logo.png')
@@ -20,40 +21,15 @@ df = load_data(
     date_cols=['DTCONSULT', 'DTDIAG', 'DTTRAT', 'DTULTINFO'],
 )
 
-
-tipos_grafico = {
-    'Número de Consultas': 'DTCONSULT',
-    'Inícios de Tratamento':'DTTRAT',
-    'Últimas informações':'DTULTINFO',
-}
-
-caracteristicas = {
-    'Derivada': 'deriv_sbv',
-    'Integral': 'int_sbv',
-}
-
-
-periodos_tempo = {
-    'Semanas': 'W',
-    'Meses': 'ME',
-}
-
 topografias = {
     'Todas': ['C18', 'C19', 'C20', 'C34', 'C50', 'C53', 'C61'],
-    'Próstata': ['C18', 'C19', 'C20'],
-    'Pulmão': ['C34'],
-    'Mama': ['C50'],
-    'Colo do Útero': ['C53'],
-    'Colorretal': ['C61']
+    **TOPOGRAFIAS
     }
 
 
 estadiamento_clinico = {
     'Todos': ['I', 'II', 'III', 'IV'],
-    'I': ['I'],
-    'II':['II'],
-    'III':['III'],
-    'IV':['IV']
+    **ESTADIAMENTO_CLINICO
 }
 
 # ---------- página ----------
@@ -62,12 +38,12 @@ col1, col2 = st.columns([1,1])
 
 with col1:
     tipo_grafico = st.pills(
-        "Informações", tipos_grafico.keys(), selection_mode='single',
+        "Informações", TIPOS_GRAFICO.keys(), selection_mode='single',
         default='Número de Consultas', 
     )
 
     periodo_tempo = st.pills(
-    "Período temporal", periodos_tempo.keys(), selection_mode='single',
+    "Período temporal", PERIODOS_TEMPO.keys(), selection_mode='single',
     default='Meses', 
     )
 
@@ -109,7 +85,7 @@ st.divider()
 
 # ---------- gráfico ----------
 
-casos_periodo = nb.analises_temporais_simp(df=df, hosp=hosp, col_tempo=tipos_grafico[tipo_grafico], freq=periodos_tempo[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
+casos_periodo = nb.analises_temporais_simp(df=df, hosp=hosp, col_tempo=TIPOS_GRAFICO[tipo_grafico], freq=PERIODOS_TEMPO[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
 
 col5, col6 = st.columns([5, 1])
 
@@ -137,11 +113,11 @@ st.divider()
 st.subheader('Características da Distribuição Temporal')
 
 carac = st.pills(
-        "", caracteristicas.keys(), selection_mode='single',
+        "", CARACTERISTICAS.keys(), selection_mode='single',
         default='Derivada', 
     )
 
-carac_periodo = nb.caract_dist(df=df, carac=caracteristicas[carac], hosp=hosp, col_tempo=tipos_grafico[tipo_grafico], freq=periodos_tempo[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
+carac_periodo = nb.caract_dist(df=df, carac=CARACTERISTICAS[carac], hosp=hosp, col_tempo=TIPOS_GRAFICO[tipo_grafico], freq=PERIODOS_TEMPO[periodo_tempo], ec=estadiamento_clinico[estadiamento], topo=topografias[topo], media_movel=media_movel, normalizacao=norm)
 text_norm = 'com normalização' if norm else ''
 text = "Integrais" if carac == 'Integral' else 'Derivadas'
 st.line_chart(data=carac_periodo, x='x', y=colunas, x_label='Tempo', y_label=f'Média das {text} {text_norm}')

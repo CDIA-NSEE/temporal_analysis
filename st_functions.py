@@ -6,6 +6,7 @@ import pydeck as pdk
 import folium
 from streamlit_folium import st_folium
 from shapely.geometry import Polygon, MultiPolygon, LineString, MultiLineString, Point, MultiPoint
+import pickle
 
 # ---------- carregamento do banco de dados ----------
 
@@ -150,3 +151,10 @@ def load_map_pydeck():
     )
 
     return deck
+
+# ---------- modelos de sobrevida ----------
+
+@st.cache_resource
+def load_model(model):
+   with open(model, "rb") as f:
+      return pickle.load(f)

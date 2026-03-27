@@ -2,6 +2,9 @@ import base64
 import streamlit as st
 import pandas as pd
 import uuid
+import re
+from config.constants import TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT
+from components.components import dicionario_dados
 # from streamlit_folium import st_folium
 
 st.set_page_config(layout='wide', page_title='Modelos de Sobrevida', page_icon='midia/conecta-logo.png')
@@ -40,21 +43,37 @@ def load_form(ind_id, idx):
         a, b = st.columns([0.9, 0.1])
 
         with a:
-
+            
             sexo = st.radio('Sexo', ['Masculino', 'Feminino'], key=f"sexo_{ind_id}")
+            
+            topo = st.pills(
+                'Topografia',
+                    list(TOPOGRAFIAS.keys()),
+                    selection_mode='single',
+                    default='Próstata',
+                    key=f"topo_{ind_id}"
+            )
 
             idade = st.number_input(
                 "Idade",
                 min_value=0,
-                max_value=120,
+                max_value=110,
                 key=f"idade_{ind_id}"
             )
 
-            score = st.slider(
-                "Score",
-                0, 100,
-                key=f"score_{idx}"
+            instituicao = st.text_input(
+                "Código da Instituição",
+                placeholder="Formato 999999",
+                key=f"institu_{ind_id}"
             )
+
+            if instituicao:
+                if not re.fullmatch(r"\d{6}", instituicao):
+                    st.toast('Digite um código válido', icon=":material/warning:")
+            
+            # escolaridade = 
+
+
         with b:
             if st.button(':red[:material/delete:]', type='tertiary', key=f"delete_{idx}"):
                 st.session_state.individuos.remove(ind_id)
@@ -63,7 +82,6 @@ def load_form(ind_id, idx):
         return {
             "sexo": sexo,
             "idade": idade,
-            "score": score
         }
 
 # ---------- interface ----------
@@ -89,6 +107,7 @@ if st.session_state.visibilidade_manual:
 
     a, b = st.columns([0.01, 0.99])
 
+    # boão de voltar e botão de adicionar indivíduos
     with a:
         if st.button(':material/chevron_backward:', type='tertiary'):
             st.session_state.visibilidade_manual = False
@@ -101,6 +120,8 @@ if st.session_state.visibilidade_manual:
         else:
             if len(st.session_state.individuos) == MAX_INDIVIDUOS:
                 st.toast(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.", icon=':material/warning:', duration=2)
+
+    dicionario_dados(legenda='**Dicionário dos dados**')
 
     dados = []
     cols = st.columns(MAX_INDIVIDUOS)
@@ -120,42 +141,7 @@ if st.session_state.visibilidade_csv:
        'ivs_infraestrutura_urbana': [0.0], 'ivs_capital_humano': [0.249],
        'ivs_renda_e_trabalho': [0.205]})
     
-    dic_nomes = [
-
-        'INSTITU', 'ESCOLARI',  'IBGE', 'TOPO', 'MORFO',
-        'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST',
-        'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana', 'ivs_capital_humano', 'ivs_renda_e_trabalho'
     
-    ]
-
-    dic_tipo = [
-        'int64', 'int64', 'int64', 'string', 'int64',
-        'int64', 'string', 'int64', 'int64', 'int64',
-        'float64', 'int64', 'float64', 'float64', 'float64'
-    ]
-    
-    dic_desc = [
-
-                'Código da Instituição. Código de seis dígitos no formato 999999.',
-                'Código para a escolaridade do paciente. Domínio: 1 - Analfabeto, 2 - Ens. Fundamental Incompleto, 3 - Ens. Fundamental Completo, 4 - Ens. Médio, 5 - Ens. Superior, 9 - Ignorado.', 
-                'Código do município de residência do paciente, conforme tabela do IBGE. Código de sete dígitos no formato 9999999.',
-                'Código da topografia do tumor, conforme CID-O-3, no formato C99',
-                'Código da morfologia do tumor, conforme CID-O-3, no formato 99999.',
-                'Ano de diagnóstico do câncer, no formato 9999.',
-                'Faixa etária do paciente no momento do diagnóstico, no formato. Domínio: \'20-29\', \'30-39\', \'40-49\', \'50-59\', \'60-69\', \'70+\'',
-                'Código do Departamento Regional de Saúde (DRS) do paciente.',
-                'Código do município de atendimento do paciente, conforme tabela do IBGE. Código de sete dígitos no formato 9999999.',
-                'Código do Departamento Regional de Saúde (DRS) da Instituição.',
-                'Distância entre o município de residência e o município de atendimento, em quilômetros.',
-                'Tempo necessário para deslocamento entre o município de residência e o município de atendimento, em minutos.',
-                'Dimensão de Infraestrutua Urbana do Índice de Vulnerabilidade Social (IVS). Formato decimal.',
-                'Dimensão de Capital Humano do Índice de Vulnerabilidade Social (IVS). Formato decimal.',
-                'Dimensão de Renda e Trabalho do Índice de Vulnerabilidade Social (IVS). Formato decimal.',
-
-    ]
-
-
-
     csv = modelo.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sobrevida.csv">aqui</a>'
@@ -181,12 +167,7 @@ if st.session_state.visibilidade_csv:
     )
     st.space(size='small')
 
-    with st.expander('Cuidado com o preenchimento do arquivo. Se necessário, olhe o **dicionário dos dados**.'):
-        st.table(pd.DataFrame({
-            'Nome da Coluna': dic_nomes,
-            'Tipo de Dado': dic_tipo,
-            'Descrição': dic_desc
-        }).set_index('Nome da Coluna'))
+    dicionario_dados(legenda='Cuidado com o preenchimento do arquivo. Se necessário, olhe o **dicionário dos dados**.')
 
     if arquivo:
         df = pd.read_csv(arquivo)

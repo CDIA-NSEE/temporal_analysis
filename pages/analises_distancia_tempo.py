@@ -183,13 +183,13 @@ with metod:
        st.markdown(' - Topografia *C61*')
     
    with st.expander('Pulmão', expanded=False):
-       st.markdown(' - Topografia *C34*; \n - Pacientes sem recebimento de hormonioterapia')
+       st.markdown(' - Topografia *C34* \n - Pacientes sem recebimento de hormonioterapia')
 
    with st.expander('Mama', expanded=False):
-       st.markdown(' - Topografia *C50*; \n - Pacientes do sexo feminino')
+       st.markdown(' - Topografia *C50* \n - Pacientes do sexo feminino')
 
    with st.expander('Colorretal', expanded=False):
-       st.markdown(' - Topografia *C18*, *C19* ou *C20*; \n - Morfologia *81403*')
+       st.markdown(' - Topografia *C18*, *C19* ou *C20* \n - Morfologia *81403*')
     
    with st.expander('Colo do Útero', expanded=False):
        st.markdown(' - Topografia *C53*')

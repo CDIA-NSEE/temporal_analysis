@@ -18,13 +18,20 @@ PERIODOS_TEMPO = {
 }
 
 TOPOGRAFIAS = {
-    'Próstata': ['C18', 'C19', 'C20'],
+    'Colorretal': ['C18', 'C19', 'C20'],
     'Pulmão': ['C34'],
     'Mama': ['C50'],
     'Colo do Útero': ['C53'],
-    'Colorretal': ['C61']
+    'Próstata': ['C61']
     }
 
+COD_TOPOGRAFIAS = {
+    'Colorretal': ['C18', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187','C188','C189', 'C19', 'C199', 'C20','C209'],
+    'Pulmão': ['C34', 'C340', 'C341', 'C342', 'C343', 'C348', 'C349'],
+    'Mama': ['C50', 'C500', 'C501', 'C502', 'C503', 'C504', 'C505', 'C506', 'C508', 'C509'],
+    'Colo do Útero': ['C53', 'C530', 'C531', 'C538', 'C539'],
+    'Próstata': ['C61', 'C619']
+    }
 
 ESTADIAMENTO_CLINICO = {
     'I': ['I'],
@@ -59,3 +66,12 @@ DRS_DICT = {
     "DRS 16 - Sorocaba": 16,
     "DRS 17 - Taubaté": 17
 }
+
+ESCOLARIDADE = {'Analfabeto': 1,
+                'Ensino Fundamental Incompleto': 2,
+                'Ensino Fundamental Completo': 3,
+                'Ensino Médio': 4,
+                'Ensino Superior': 5,
+                'Ignorado': 9}
+
+FAIXA_ETARIA = ['20-29', '30-39', '40-49', '50-59', '60-69', '70+']

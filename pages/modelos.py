@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import uuid
 import re
-from config.constants import TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT
+from config.constants import COD_TOPOGRAFIAS, FAIXA_ETARIA, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
 from components.components import dicionario_dados
 # from streamlit_folium import st_folium
 
@@ -54,11 +54,12 @@ def load_form(ind_id, idx):
                     key=f"topo_{ind_id}"
             )
 
-            idade = st.number_input(
-                "Idade",
-                min_value=0,
-                max_value=110,
-                key=f"idade_{ind_id}"
+            cod_topo = st.selectbox(
+                label='Código da Topografia',
+                options=list(COD_TOPOGRAFIAS[topo]),
+                placeholder=f'Código da topografia de {topo.lower()}',
+                index=None,
+                key=f"cod_topo_{ind_id}"
             )
 
             instituicao = st.text_input(
@@ -70,8 +71,118 @@ def load_form(ind_id, idx):
             if instituicao:
                 if not re.fullmatch(r"\d{6}", instituicao):
                     st.toast('Digite um código válido', icon=":material/warning:")
+
+            escolaridade = st.selectbox(
+                label="Escolaridade",
+                options=ESCOLARIDADE.keys(),
+                placeholder="Selecione a escolaridade",
+                index=None,
+                key=f"escolaridade_{ind_id}"
+            )
+
+            morfo = st.text_input(
+                "Código da Morfologia",
+                placeholder="Formato 99999",
+                key=f"morfo_{ind_id}"
+            )
+
+            if morfo:
+                if not re.fullmatch(r"\d{5}", morfo):
+                    st.toast('Digite um código válido', icon=":material/warning:")
             
-            # escolaridade = 
+            anodiag = st.number_input(
+                "Ano de Diagnóstico",
+                min_value=1999,
+                max_value=2026,
+                key=f"anodiag_{ind_id}"
+            )
+
+            faixaetar = st.selectbox(
+                label="Faixa Etária",
+                options=FAIXA_ETARIA,
+                placeholder="Selecione a faixa etária",
+                index=None,
+                key=f"faixaetar_{ind_id}"
+            )
+
+            drs = st.selectbox(
+            label='DRS de Residência',
+            options=DRS_DICT.keys(),
+            placeholder=f'Selecione a DRS desejada',
+            index=None,
+            key=f"drs_{ind_id}"
+            )
+
+            drs_institu = st.selectbox(
+            label='DRS de Hospital',
+            options=DRS_DICT.keys(),
+            placeholder=f'Selecione a DRS desejada',
+            index=None,
+            key=f"drs_inst_{ind_id}"
+            )
+
+            ibge = st.text_input(
+                "Código IBGE do município de Residência",
+                placeholder="Formato 9999999",
+                key=f"ibge_{ind_id}"
+            )
+
+            if ibge:
+                if not re.fullmatch(r"\d{7}", ibge):
+                    st.toast('Digite um código válido', icon=":material/warning:")
+            
+            ibge_inst = st.text_input(
+                "Código IBGE do município de Residência",
+                placeholder="Formato 9999999",
+                key=f"ibge_inst{ind_id}"
+            )
+
+            if ibge_inst:
+                if not re.fullmatch(r"\d{7}", ibge_inst):
+                    st.toast('Digite um código válido', icon=":material/warning:")
+            
+            dist_carro = st.number_input(
+                "Distância de carro da residência ao hospital (km)",
+                min_value=0,
+                max_value=500,
+                key=f"dist_carro_{ind_id}"
+            )
+
+            tempo_carro = st.number_input(
+                "Tempo de carro da residência ao hospital (min)",
+                min_value=0,
+                max_value=1000,
+                key=f"tempo_carro_{ind_id}"
+            )
+
+            ivs_infra = st.number_input(
+                "Índice de Vulnerabilidade Social do município - Infraestrutura Urbana",
+                min_value=0.0,
+                max_value=1.0,
+                step=0.001,
+                format="%.3f",
+                key=f"ivs_infra_{ind_id}"
+
+            )
+
+            ivs_capital = st.number_input(
+                "Índice de Vulnerabilidade Social do município - Capital Humano",
+                min_value=0.0,
+                max_value=1.0,
+                step=0.001,
+                format="%.3f",
+                key=f"ivs_capital_{ind_id}"
+            )
+
+            ivs_renda = st.number_input(
+                "Índice de Vulnerabilidade Social do município - Renda e Trabalho",
+                min_value=0.0,
+                max_value=1.0,
+                step=0.001,
+                format="%.3f",
+                key=f"ivs_renda_{ind_id}"
+            )
+
 
 
         with b:
@@ -80,8 +191,26 @@ def load_form(ind_id, idx):
                 st.rerun()
 
         return {
-            "sexo": sexo,
-            "idade": idade,
+            "INSTITU": instituicao,
+            "ESCOLARI": escolaridade,
+            "SEXO": sexo,
+            "IBGE": ibge,
+            # CATEATEND?
+            # DIAGPREV?
+            "TOPO": cod_topo,
+            # ECGRUP?
+            "ANODIAG": anodiag,
+            "FAIXAETAR": faixaetar,
+            "DRS": drs,
+            "IBGEATEND": ibge_inst,
+            "DRS_INST": drs_institu,
+            # HABILIT_HOSP?
+            "morfo": morfo,
+            "DISTANCIA_CARRO": dist_carro,
+            "TEMPO_CARRO": tempo_carro,
+            "ivs_infraestrutura_urbana": ivs_infra,
+            "ivs_capital_humano": ivs_capital,
+            "ivs_renda_e_trabalho": ivs_renda,
         }
 
 # ---------- interface ----------
@@ -120,8 +249,6 @@ if st.session_state.visibilidade_manual:
         else:
             if len(st.session_state.individuos) == MAX_INDIVIDUOS:
                 st.toast(f"O número máximo de indivíduos é {MAX_INDIVIDUOS}.", icon=':material/warning:', duration=2)
-
-    dicionario_dados(legenda='**Dicionário dos dados**')
 
     dados = []
     cols = st.columns(MAX_INDIVIDUOS)
@@ -167,7 +294,7 @@ if st.session_state.visibilidade_csv:
     )
     st.space(size='small')
 
-    dicionario_dados(legenda='Cuidado com o preenchimento do arquivo. Se necessário, olhe o **dicionário dos dados**.')
+    dicionario_dados(legenda='Cuidado com o preenchimento do arquivo. Se necessário, olhe o **dicionário dos dados**.', planilha=True)
 
     if arquivo:
         df = pd.read_csv(arquivo)

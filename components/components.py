@@ -1,13 +1,19 @@
 import streamlit as st
 import pandas as pd
 
-def dicionario_dados(legenda):
-    dic_nomes = [
+def dicionario_dados(legenda, planilha):
+    dic_colunas = [
 
         'INSTITU', 'ESCOLARI',  'IBGE', 'TOPO', 'MORFO',
         'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST',
         'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana', 'ivs_capital_humano', 'ivs_renda_e_trabalho'
     
+    ]
+
+    dic_nomes = [
+        'Instituição', 'Escolaridade', 'IBGE Residência', 'Topografia', 'Morfologia',
+        'Ano de Diagnóstico', 'Faixa Etária', 'DRS Residência', 'IBGE Atendimento', 'DRS Instituição',
+        'Distância de Carro', 'Tempo de Carro', 'IVS Infraestrutura Urbana', 'IVS Capital Humano', 'IVS Renda e Trabalho'
     ]
 
     dic_tipo = [
@@ -21,7 +27,7 @@ def dicionario_dados(legenda):
                 'Código da Instituição. Código de seis dígitos no formato 999999.',
                 'Código para a escolaridade do paciente. Domínio: 1 - Analfabeto, 2 - Ens. Fundamental Incompleto, 3 - Ens. Fundamental Completo, 4 - Ens. Médio, 5 - Ens. Superior, 9 - Ignorado.', 
                 'Código do município de residência do paciente, conforme tabela do IBGE. Código de sete dígitos no formato 9999999.',
-                'Código da topografia do tumor, conforme CID-O-3, no formato C99',
+                'Código da topografia do tumor, conforme CID-O-3, no formato C999.',
                 'Código da morfologia do tumor, conforme CID-O-3, no formato 99999.',
                 'Ano de diagnóstico do câncer, no formato 9999.',
                 'Faixa etária do paciente no momento do diagnóstico, no formato. Domínio: \'20-29\', \'30-39\', \'40-49\', \'50-59\', \'60-69\', \'70+\'',
@@ -37,10 +43,17 @@ def dicionario_dados(legenda):
     ]
 
     dicionario = st.expander(legenda)
-    dicionario.table(pd.DataFrame({
-            'Nome da Coluna': dic_nomes,
-            'Tipo de Dado': dic_tipo,
-            'Descrição': dic_desc
-        }).set_index('Nome da Coluna'))
+    if planilha:
+        dicionario.table(pd.DataFrame({
+                'Nome da Coluna': dic_colunas,
+                'Tipo de Dado': dic_tipo,
+                'Descrição': dic_desc
+            }).set_index('Nome da Coluna'))
+    else:
+        dicionario.table(pd.DataFrame({
+                'Nome da Coluna': dic_nomes,
+                'Tipo de Dado': dic_tipo,
+                'Descrição': dic_desc
+            }).set_index('Nome da Coluna'))
     
     return dicionario

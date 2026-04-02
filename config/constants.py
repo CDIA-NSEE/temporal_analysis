@@ -88,3 +88,37 @@ HABILIT_HOSP = {
     'CACON': 2,
     'UNACON com radioterapia': 3,
 }
+
+FEATURES = {
+    'Colorretal': ['INSTITU', 'ESCOLARI', 'SEXO', 'IBGE', 'CATEATEND',
+               'DIAGPREV', 'TOPO', 'MORFO', 'ECGRUP', 'ANODIAG',
+               'FAIXAETAR', 'DRS', 'IBGEATEN',
+               'DRS_INST', 'HABILIT_HOSP', 'DISTANCIA_CARRO', 'TEMPO_CARRO'
+               'TRATCONS_CAT', 'DIAGTRAT_CAT', 'ivs_infraestrutura_urbana',
+               'ivs_capital_humano', 'ivs_renda_e_trabalho'
+            ],
+    'Pulmão': ['INSTITU', 'ESCOLARI', 'SEXO', 'IBGE', 'CATEATEND', 'DIAGPREV', 'TOPO',
+            'MORFO', 'ECGRUP', 'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN',
+            'DRS_INST', 'HABILIT_HOSP', 'DISTANCIA_CARRO', 'TEMPO_CARRO',
+            'TRATCONS_CAT', 'DIAGTRAT_CAT', 'ivs_infraestrutura_urbana',
+            'ivs_capital_humano', 'ivs_renda_e_trabalho'
+            ] ,
+    'Mama': ['INSTITU', 'ESCOLARI', 'IBGE', 'CATEATEND', 'DIAGPREV', 'TOPO', 'MORFO',
+            'ECGRUP', 'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST',
+            'HABILIT_HOSP', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'TRATCONS_CAT',
+            'DIAGTRAT_CAT', 'ivs_infraestrutura_urbana', 'ivs_capital_humano',
+            'ivs_renda_e_trabalho'
+            ],
+    'Colo do Útero': ['INSTITU', 'ESCOLARI', 'IBGE', 'CATEATEND', 'DIAGPREV', 'TOPO', 'MORFO',
+            'ECGRUP', 'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST',
+            'HABILIT_HOSP', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'TRATCONS_CAT',
+            'DIAGTRAT_CAT', 'ivs_infraestrutura_urbana', 'ivs_capital_humano',
+            'ivs_renda_e_trabalho'
+            ],
+    'Próstata': ['INSTITU', 'ESCOLARI', 'IBGE', 'CATEATEND', 'DIAGPREV', 'TOPO', 'MORFO',
+            'ECGRUP', 'ANODIAG', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST',
+            'HABILIT_HOSP', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'TRATCONS_CAT',
+            'DIAGTRAT_CAT', 'ivs_infraestrutura_urbana', 'ivs_capital_humano',
+            'ivs_renda_e_trabalho'
+            ]
+}

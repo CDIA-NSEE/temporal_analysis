@@ -123,7 +123,33 @@ def load_form(ind_id, idx):
                 key=f"anodiag_{ind_id}"
             )
 
-            
+            consult = st.date_input(
+                "Data de Consulta",
+                value=None,
+                max_value=None,
+                format="DD/MM/YYYY",
+                key=f"consult_{ind_id}"
+            )
+
+            diag = st.date_input(
+                "Data de Diagnóstico",
+                value=None,
+                max_value=None,
+                format="DD/MM/YYYY",
+                key=f"diag_{ind_id}"
+            )
+
+            trat = st.date_input(
+                "Data de Tratamento",
+                value=None,
+                max_value=None,
+                format="DD/MM/YYYY",
+                key=f"trat_{ind_id}"
+            )
+
+            tratcons = trat - consult if trat and consult else None
+            diagtrat = trat - diag if trat and diag else None
+            diagprev = 1 if diag and consult and diag < consult else 0
 
             faixaetar = st.selectbox(
                 label="Faixa Etária",
@@ -229,7 +255,7 @@ def load_form(ind_id, idx):
             "SEXO": sexo,
             "IBGE": ibge,
             "CATEATEND": cateaten,
-            # DIAGPREV?
+            "DIAGPREV": diagprev,
             "TOPO": cod_topo,
             "MORFO": morfo,
             "ECGRUP": ecgrup,
@@ -241,8 +267,8 @@ def load_form(ind_id, idx):
             "HABILIT_HOSP": habilit_hosp,
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
-            # TRATCONS_CAT?
-            # DIAGTRAT_CAT?
+            "TRATCONS_CAT": tratcons,
+            "DIAGTRAT_CAT": diagtrat,
             "ivs_infraestrutura_urbana": ivs_infra,
             "ivs_capital_humano": ivs_capital,
             "ivs_renda_e_trabalho": ivs_renda,

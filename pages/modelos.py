@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import uuid
 import re
-from config.constants import COD_TOPOGRAFIAS, FAIXA_ETARIA, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
+from config.constants import CATEATEND, COD_TOPOGRAFIAS, FAIXA_ETARIA, HABILIT_HOSP, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
 from components.components import dicionario_dados
 # from streamlit_folium import st_folium
 
@@ -45,6 +45,14 @@ def load_form(ind_id, idx):
         with a:
             
             sexo = st.radio('Sexo', ['Masculino', 'Feminino'], key=f"sexo_{ind_id}")
+
+            ecgrup = st.pills(
+                'Estadiamento Clínico',
+                    list(ESTADIAMENTO_CLINICO.keys()),
+                    selection_mode='single',
+                    default='I',
+                    key=f"ecgrup_{ind_id}"
+            )
             
             topo = st.pills(
                 'Topografia',
@@ -61,6 +69,22 @@ def load_form(ind_id, idx):
                 index=None,
                 key=f"cod_topo_{ind_id}"
             )
+            
+            cateaten = st.selectbox(
+                label='Categoria de Atendimento',
+                options=list(CATEATEND.keys()),
+                placeholder=f'Selecione a categoria de atendimento',
+                index=None,
+                key=f"cateaten_{ind_id}"
+            )
+
+            habilit_hosp = st.selectbox(
+                label='Habilitação do Hospital',
+                options=list(HABILIT_HOSP.keys()),
+                placeholder=f'Selecione a habilitação do hospital',
+                index=None,
+                key=f"habilit_hosp_{ind_id}"
+            )
 
             instituicao = st.text_input(
                 "Código da Instituição",
@@ -71,6 +95,8 @@ def load_form(ind_id, idx):
             if instituicao:
                 if not re.fullmatch(r"\d{6}", instituicao):
                     st.toast('Digite um código válido', icon=":material/warning:")
+            
+            
 
             escolaridade = st.selectbox(
                 label="Escolaridade",
@@ -96,6 +122,8 @@ def load_form(ind_id, idx):
                 max_value=2026,
                 key=f"anodiag_{ind_id}"
             )
+
+            
 
             faixaetar = st.selectbox(
                 label="Faixa Etária",
@@ -145,6 +173,7 @@ def load_form(ind_id, idx):
                 "Distância de carro da residência ao hospital (km)",
                 min_value=0,
                 max_value=500,
+                value=None,
                 key=f"dist_carro_{ind_id}"
             )
 
@@ -152,6 +181,7 @@ def load_form(ind_id, idx):
                 "Tempo de carro da residência ao hospital (min)",
                 min_value=0,
                 max_value=1000,
+                value=None,
                 key=f"tempo_carro_{ind_id}"
             )
 
@@ -159,6 +189,7 @@ def load_form(ind_id, idx):
                 "Índice de Vulnerabilidade Social do município - Infraestrutura Urbana",
                 min_value=0.0,
                 max_value=1.0,
+                value=None,
                 step=0.001,
                 format="%.3f",
                 key=f"ivs_infra_{ind_id}"
@@ -169,6 +200,7 @@ def load_form(ind_id, idx):
                 "Índice de Vulnerabilidade Social do município - Capital Humano",
                 min_value=0.0,
                 max_value=1.0,
+                value=None,
                 step=0.001,
                 format="%.3f",
                 key=f"ivs_capital_{ind_id}"
@@ -178,6 +210,7 @@ def load_form(ind_id, idx):
                 "Índice de Vulnerabilidade Social do município - Renda e Trabalho",
                 min_value=0.0,
                 max_value=1.0,
+                value=None,
                 step=0.001,
                 format="%.3f",
                 key=f"ivs_renda_{ind_id}"
@@ -195,19 +228,21 @@ def load_form(ind_id, idx):
             "ESCOLARI": escolaridade,
             "SEXO": sexo,
             "IBGE": ibge,
-            # CATEATEND?
+            "CATEATEND": cateaten,
             # DIAGPREV?
             "TOPO": cod_topo,
-            # ECGRUP?
+            "MORFO": morfo,
+            "ECGRUP": ecgrup,
             "ANODIAG": anodiag,
             "FAIXAETAR": faixaetar,
             "DRS": drs,
-            "IBGEATEND": ibge_inst,
+            "IBGEATEN": ibge_inst,
             "DRS_INST": drs_institu,
-            # HABILIT_HOSP?
-            "morfo": morfo,
+            "HABILIT_HOSP": habilit_hosp,
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
+            # TRATCONS_CAT?
+            # DIAGTRAT_CAT?
             "ivs_infraestrutura_urbana": ivs_infra,
             "ivs_capital_humano": ivs_capital,
             "ivs_renda_e_trabalho": ivs_renda,

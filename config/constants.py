@@ -75,3 +75,16 @@ ESCOLARIDADE = {'Analfabeto': 1,
                 'Ignorado': 9}
 
 FAIXA_ETARIA = ['20-29', '30-39', '40-49', '50-59', '60-69', '70+']
+
+CATEATEND = {
+    'Convênio': 1,
+    'SUS': 2,
+    'Particular': 3,
+    'Sem Informação': 9
+}
+
+HABILIT_HOSP = {
+    'UNACON sem radioterapia': 1,
+    'CACON': 2,
+    'UNACON com radioterapia': 3,
+}

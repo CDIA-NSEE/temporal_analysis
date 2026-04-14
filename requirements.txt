@@ -8,3 +8,4 @@ streamlit-folium
 geopandas
 shapely
 plotly
+scikit-survival

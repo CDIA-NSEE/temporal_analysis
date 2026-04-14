@@ -155,6 +155,7 @@ def load_map_pydeck():
 # ---------- modelos de sobrevida ----------
 
 @st.cache_resource
-def load_model(model):
+def load_artifacts(model):
    with open(model, "rb") as f:
-      return pickle.load(f)
+      artifacts = pickle.load(f)
+      return artifacts

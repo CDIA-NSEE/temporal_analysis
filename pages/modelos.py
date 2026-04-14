@@ -5,6 +5,8 @@ import uuid
 import re
 from config.constants import CATEATEND, COD_TOPOGRAFIAS, FAIXA_ETARIA, HABILIT_HOSP, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
 from components.components import dicionario_dados
+from st_functions import load_artifacts
+from notebook import preprocessing
 # from streamlit_folium import st_folium
 
 st.set_page_config(layout='wide', page_title='Modelos de Sobrevida', page_icon='midia/conecta-logo.png')
@@ -92,9 +94,9 @@ def load_form(ind_id, idx):
                 key=f"institu_{ind_id}"
             )
 
-            if instituicao:
-                if not re.fullmatch(r"\d{6}", instituicao):
-                    st.toast('Digite um código válido', icon=":material/warning:")
+            # if instituicao:
+            #     if not re.fullmatch(r"\d{6}", instituicao):
+            #         st.toast('Digite um código válido', icon=":material/warning:")
             
             
 
@@ -147,9 +149,14 @@ def load_form(ind_id, idx):
                 key=f"trat_{ind_id}"
             )
 
-            tratcons = trat - consult if trat and consult else None
-            diagtrat = trat - diag if trat and diag else None
+            tratcons = (trat - consult).days if trat and consult else None
+            if tratcons is not None:
+                tratcons = 3 if tratcons < 0 else 0 if tratcons <= 60 else 1 if tratcons <= 90 else 2
+            diagtrat = (trat - diag).days if trat and diag else None
+            if diagtrat is not None:
+                diagtrat = 3 if diagtrat < 0 else 0 if diagtrat <= 60 else 1 if diagtrat <= 90 else 2
             diagprev = 1 if diag and consult and diag < consult else 0
+
 
             faixaetar = st.selectbox(
                 label="Faixa Etária",
@@ -267,6 +274,9 @@ def load_form(ind_id, idx):
             "HABILIT_HOSP": habilit_hosp,
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
+            # "trat": trat,
+            # "consult": consult,
+            # "diag": diag,
             "TRATCONS_CAT": tratcons,
             "DIAGTRAT_CAT": diagtrat,
             "ivs_infraestrutura_urbana": ivs_infra,
@@ -318,7 +328,41 @@ if st.session_state.visibilidade_manual:
         with cols[idx]:
             ind = load_form(ind_id, idx)
             if ind:
-                dados.append((ind_id, idx))
+                dados.append((ind))
+    
+    # st.write(dados)
+
+    ###############################################
+
+    artifacts = load_artifacts("models\colo_utero.pkl")
+    model = artifacts["best_model"]
+    enc = artifacts["encoder"]
+    norm = artifacts["normalizer"]
+
+
+    ohe_list = ['CATEATEND', 'DIAGPREV', 'ECGRUP', 'TRATCONS_CAT', 'DIAGTRAT_CAT',
+       'HABILIT_HOSP']
+
+    te_list = ['INSTITU', 'ESCOLARI', 'IBGE', 'TOPO', 'MORFO', 'FAIXAETAR', 'DRS', 'IBGEATEN',
+      'DRS_INST', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana',
+      'ivs_capital_humano', 'ivs_renda_e_trabalho']
+
+    df = pd.DataFrame(dados)
+    # st.write(df)
+
+    if st.button('Comparar Sobrevida', type='primary'):
+        st.write("Enviando dados para predição...")
+        df_processed = preprocessing.test_preprocessing(df, enc, norm, ohe_list, te_list)
+
+        df_processed = df_processed.reindex(columns=artifacts["features"], fill_value=0)
+
+        pred = model.predict(df_processed)
+
+        st.write(pred)
+        # Aqui você pode adicionar a lógica para enviar os dados para o modelo de predição
+
+
+    #################################################
 
 # ---------- upload do arquivo. csv ----------
 

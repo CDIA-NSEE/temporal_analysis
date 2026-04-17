@@ -7,6 +7,11 @@ def test_preprocessing(df, enc, norm, ohe_list=None, te_list=None):
     # Apply One-Hot Encoding (if encoder is provided)
     if ohe_list is not None:
         for col in ohe_list: # Iterate through categorical columns to be encoded
+
+            # unknown = set(df_aux[col].unique()) - set(enc[col].categories_[0])
+            # if unknown:
+            #     print(f"Coluna {col} tem categorias desconhecidas: {unknown}")
+            
             ohe_results = enc[col].transform(df_aux[[col]])  # Apply one-hot encoding
             df1 = pd.DataFrame(ohe_results.toarray(),  # Create a new DataFrame with the encoded features
                                columns=enc[col].get_feature_names_out(),

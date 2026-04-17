@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import uuid
 import re
-from config.constants import CATEATEND, COD_TOPOGRAFIAS, FAIXA_ETARIA, HABILIT_HOSP, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
+from config.constants import SEXO, CATEATEND, COD_TOPOGRAFIAS, FAIXA_ETARIA, HABILIT_HOSP, TOPOGRAFIAS, ESTADIAMENTO_CLINICO, TIPO_DRS, DRS_DICT, ESCOLARIDADE 
 from components.components import dicionario_dados
 from st_functions import load_artifacts
 from notebook import preprocessing
@@ -46,7 +46,7 @@ def load_form(ind_id, idx):
 
         with a:
             
-            sexo = st.radio('Sexo', ['Masculino', 'Feminino'], key=f"sexo_{ind_id}")
+            sexo = st.radio('Sexo', SEXO.keys(), key=f"sexo_{ind_id}")
 
             ecgrup = st.pills(
                 'Estadiamento Clínico',
@@ -258,20 +258,20 @@ def load_form(ind_id, idx):
 
         return {
             "INSTITU": instituicao,
-            "ESCOLARI": escolaridade,
-            "SEXO": sexo,
+            "ESCOLARI": ESCOLARIDADE[escolaridade],
+            "SEXO": SEXO[sexo],
             "IBGE": ibge,
-            "CATEATEND": cateaten,
+            "CATEATEND": CATEATEND[cateaten],
             "DIAGPREV": diagprev,
             "TOPO": cod_topo,
             "MORFO": morfo,
             "ECGRUP": ecgrup,
             "ANODIAG": anodiag,
             "FAIXAETAR": faixaetar,
-            "DRS": drs,
+            "DRS": DRS_DICT[drs],
             "IBGEATEN": ibge_inst,
-            "DRS_INST": drs_institu,
-            "HABILIT_HOSP": habilit_hosp,
+            "DRS_INST": DRS_DICT[drs_institu],
+            "HABILIT_HOSP": HABILIT_HOSP[habilit_hosp],
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
             # "trat": trat,
@@ -334,18 +334,15 @@ if st.session_state.visibilidade_manual:
 
     ###############################################
 
-    artifacts = load_artifacts("models\colo_utero.pkl")
+    artifacts = load_artifacts("models\colorretal.pkl")
     model = artifacts["best_model"]
     enc = artifacts["encoder"]
     norm = artifacts["normalizer"]
 
 
-    ohe_list = ['CATEATEND', 'DIAGPREV', 'ECGRUP', 'TRATCONS_CAT', 'DIAGTRAT_CAT',
-       'HABILIT_HOSP']
+    ohe_list = ['CATEATEND', 'DIAGPREV', 'ECGRUP', 'TRATCONS_CAT', 'DIAGTRAT_CAT', 'HABILIT_HOSP', 'SEXO']
 
-    te_list = ['INSTITU', 'ESCOLARI', 'IBGE', 'TOPO', 'MORFO', 'FAIXAETAR', 'DRS', 'IBGEATEN',
-      'DRS_INST', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana',
-      'ivs_capital_humano', 'ivs_renda_e_trabalho']
+    te_list = ['INSTITU', 'ESCOLARI', 'IBGE', 'TOPO', 'MORFO', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana', 'ivs_capital_humano', 'ivs_renda_e_trabalho']
 
     df = pd.DataFrame(dados)
     # st.write(df)
@@ -354,12 +351,13 @@ if st.session_state.visibilidade_manual:
         st.write("Enviando dados para predição...")
         df_processed = preprocessing.test_preprocessing(df, enc, norm, ohe_list, te_list)
 
-        df_processed = df_processed.reindex(columns=artifacts["features"], fill_value=0)
+        st.write(df_processed)
 
-        pred = model.predict(df_processed)
+        # df_processed = df_processed.reindex(columns=artifacts["features"], fill_value=0)
 
-        st.write(pred)
-        # Aqui você pode adicionar a lógica para enviar os dados para o modelo de predição
+        # pred = model.predict(df_processed)
+
+        # st.write(pred)
 
 
     #################################################

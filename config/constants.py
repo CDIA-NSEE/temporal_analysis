@@ -88,9 +88,9 @@ CATEATEND = {
 }
 
 HABILIT_HOSP = {
-    'UNACON sem radioterapia': 1,
-    'CACON': 2,
-    'UNACON com radioterapia': 3,
+    'UNACON sem radioterapia': 0,
+    'CACON': 3,
+    'UNACON com radioterapia': 1,
 }
 
 FEATURES = {

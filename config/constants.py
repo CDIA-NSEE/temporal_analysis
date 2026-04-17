@@ -11,6 +11,10 @@ CARACTERISTICAS = {
     'Integral': 'int_sbv',
 }
 
+SEXO = {
+    'Masculino': 1,
+    'Feminino': 2,
+}
 
 PERIODOS_TEMPO = {
     'Semanas': 'W',

@@ -8,6 +8,7 @@ from components.components import dicionario_dados
 from st_functions import load_artifacts
 from notebook import preprocessing
 import matplotlib.pyplot as plt
+import datetime
 # from streamlit_folium import st_folium
 
 st.set_page_config(layout='wide', page_title='Modelos de Sobrevida', page_icon='midia/conecta-logo.png')
@@ -98,8 +99,6 @@ def load_form(ind_id, idx):
             # if instituicao:
             #     if not re.fullmatch(r"\d{6}", instituicao):
             #         st.toast('Digite um código válido', icon=":material/warning:")
-            
-            
 
             escolaridade = st.selectbox(
                 label="Escolaridade",
@@ -118,17 +117,11 @@ def load_form(ind_id, idx):
             if morfo:
                 if not re.fullmatch(r"\d{5}", morfo):
                     st.toast('Digite um código válido', icon=":material/warning:")
-            
-            anodiag = st.number_input(
-                "Ano de Diagnóstico",
-                min_value=1999,
-                max_value=2026,
-                key=f"anodiag_{ind_id}"
-            )
 
             consult = st.date_input(
                 "Data de Consulta",
-                value=None,
+                value="today",
+                min_value=datetime.date(2000, 1, 1),
                 max_value=None,
                 format="DD/MM/YYYY",
                 key=f"consult_{ind_id}"
@@ -136,7 +129,8 @@ def load_form(ind_id, idx):
 
             diag = st.date_input(
                 "Data de Diagnóstico",
-                value=None,
+                value="today",
+                min_value=datetime.date(2000, 1, 1),
                 max_value=None,
                 format="DD/MM/YYYY",
                 key=f"diag_{ind_id}"
@@ -144,7 +138,8 @@ def load_form(ind_id, idx):
 
             trat = st.date_input(
                 "Data de Tratamento",
-                value=None,
+                value="today",
+                min_value=datetime.date(2000, 1, 1),
                 max_value=None,
                 format="DD/MM/YYYY",
                 key=f"trat_{ind_id}"
@@ -256,6 +251,11 @@ def load_form(ind_id, idx):
             if st.button(':red[:material/delete:]', type='tertiary', key=f"delete_{idx}"):
                 st.session_state.individuos.remove(ind_id)
                 st.rerun()
+        
+        campos_obrigatorios = [escolaridade, sexo, cateaten, diag, drs, drs_institu, habilit_hosp]
+
+        if any(campo in [None, ''] for campo in campos_obrigatorios):
+            return None
 
         return {
             "INSTITU": instituicao,
@@ -267,7 +267,7 @@ def load_form(ind_id, idx):
             "TOPO": cod_topo,
             "MORFO": morfo,
             "ECGRUP": ecgrup,
-            "ANODIAG": anodiag,
+            "ANODIAG": diag.year, 
             "FAIXAETAR": faixaetar,
             "DRS": DRS_DICT[drs],
             "IBGEATEN": ibge_inst,
@@ -275,9 +275,6 @@ def load_form(ind_id, idx):
             "HABILIT_HOSP": HABILIT_HOSP[habilit_hosp],
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
-            # "trat": trat,
-            # "consult": consult,
-            # "diag": diag,
             "TRATCONS_CAT": tratcons,
             "DIAGTRAT_CAT": diagtrat,
             "ivs_infraestrutura_urbana": ivs_infra,
@@ -331,7 +328,7 @@ if st.session_state.visibilidade_manual:
             if ind:
                 dados.append((ind))
     
-    # st.write(dados)
+    st.write(dados)
 
     ###############################################
 

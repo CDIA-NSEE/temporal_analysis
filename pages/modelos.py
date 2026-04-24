@@ -63,6 +63,7 @@ def load_form(ind_id, idx):
                     list(TOPOGRAFIAS.keys()),
                     selection_mode='single',
                     default='Próstata',
+                    required=True,
                     key=f"topo_{ind_id}"
             )
 
@@ -96,9 +97,9 @@ def load_form(ind_id, idx):
                 key=f"institu_{ind_id}"
             )
 
-            # if instituicao:
-            #     if not re.fullmatch(r"\d{6}", instituicao):
-            #         st.toast('Digite um código válido', icon=":material/warning:")
+            if instituicao:
+                if not re.fullmatch(r"^\d+$", instituicao):
+                    st.toast('Digite um código válido para :orange[Instituição]', icon=":material/warning:")
 
             escolaridade = st.selectbox(
                 label="Escolaridade",
@@ -116,7 +117,7 @@ def load_form(ind_id, idx):
 
             if morfo:
                 if not re.fullmatch(r"\d{5}", morfo):
-                    st.toast('Digite um código válido', icon=":material/warning:")
+                    st.toast('Digite um código válido para :orange[Morfologia]', icon=":material/warning:")
 
             consult = st.date_input(
                 "Data de Consulta",
@@ -185,8 +186,8 @@ def load_form(ind_id, idx):
             )
 
             if ibge:
-                if not re.fullmatch(r"\d{7}", ibge):
-                    st.toast('Digite um código válido', icon=":material/warning:")
+                if not re.fullmatch(r"^\d+$", ibge):
+                    st.toast('Digite um código válido para :orange[IBGE]', icon=":material/warning:")
             
             ibge_inst = st.text_input(
                 "Código IBGE do município de Residência",
@@ -195,8 +196,8 @@ def load_form(ind_id, idx):
             )
 
             if ibge_inst:
-                if not re.fullmatch(r"\d{7}", ibge_inst):
-                    st.toast('Digite um código válido', icon=":material/warning:")
+                if not re.fullmatch(r"^\d+$", ibge_inst):
+                    st.toast('Digite um código válido para :orange[IBGE da Instituição]', icon=":material/warning:")
             
             dist_carro = st.number_input(
                 "Distância de carro da residência ao hospital (km)",
@@ -251,28 +252,23 @@ def load_form(ind_id, idx):
             if st.button(':red[:material/delete:]', type='tertiary', key=f"delete_{idx}"):
                 st.session_state.individuos.remove(ind_id)
                 st.rerun()
-        
-        campos_obrigatorios = [escolaridade, sexo, cateaten, diag, drs, drs_institu, habilit_hosp]
 
-        if any(campo in [None, ''] for campo in campos_obrigatorios):
-            return None
-
-        return {
+        features = {
             "INSTITU": instituicao,
-            "ESCOLARI": ESCOLARIDADE[escolaridade],
-            "SEXO": SEXO[sexo],
+            "ESCOLARI": ESCOLARIDADE.get(escolaridade),
+            "SEXO": SEXO.get(sexo),
             "IBGE": ibge,
-            "CATEATEND": CATEATEND[cateaten],
+            "CATEATEND": CATEATEND.get(cateaten),
             "DIAGPREV": diagprev,
             "TOPO": cod_topo,
             "MORFO": morfo,
             "ECGRUP": ecgrup,
             "ANODIAG": diag.year, 
             "FAIXAETAR": faixaetar,
-            "DRS": DRS_DICT[drs],
+            "DRS": DRS_DICT.get(drs),
             "IBGEATEN": ibge_inst,
-            "DRS_INST": DRS_DICT[drs_institu],
-            "HABILIT_HOSP": HABILIT_HOSP[habilit_hosp],
+            "DRS_INST": DRS_DICT.get(drs_institu),
+            "HABILIT_HOSP": HABILIT_HOSP.get(habilit_hosp),
             "DISTANCIA_CARRO": dist_carro,
             "TEMPO_CARRO": tempo_carro,
             "TRATCONS_CAT": tratcons,
@@ -280,7 +276,12 @@ def load_form(ind_id, idx):
             "ivs_infraestrutura_urbana": ivs_infra,
             "ivs_capital_humano": ivs_capital,
             "ivs_renda_e_trabalho": ivs_renda,
+            "topo": topo,
         }
+
+        if any(campo in [None, ''] for campo in features.values()):
+            return None
+        return features
 
 # ---------- interface ----------
 
@@ -327,8 +328,6 @@ if st.session_state.visibilidade_manual:
             ind = load_form(ind_id, idx)
             if ind:
                 dados.append((ind))
-    
-    st.write(dados)
 
     ###############################################
 

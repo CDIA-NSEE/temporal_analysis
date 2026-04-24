@@ -2,7 +2,7 @@ streamlit
 pandas
 matplotlib
 pyunicorn
-scikit-learn
+scikit-learn==1.5.2
 folium
 streamlit-folium
 geopandas

@@ -7,6 +7,7 @@ from config.constants import SEXO, CATEATEND, COD_TOPOGRAFIAS, FAIXA_ETARIA, HAB
 from components.components import dicionario_dados
 from st_functions import load_artifacts
 from notebook import preprocessing
+import matplotlib.pyplot as plt
 # from streamlit_folium import st_folium
 
 st.set_page_config(layout='wide', page_title='Modelos de Sobrevida', page_icon='midia/conecta-logo.png')
@@ -345,19 +346,29 @@ if st.session_state.visibilidade_manual:
     te_list = ['INSTITU', 'ESCOLARI', 'IBGE', 'TOPO', 'MORFO', 'FAIXAETAR', 'DRS', 'IBGEATEN', 'DRS_INST', 'DISTANCIA_CARRO', 'TEMPO_CARRO', 'ivs_infraestrutura_urbana', 'ivs_capital_humano', 'ivs_renda_e_trabalho']
 
     df = pd.DataFrame(dados)
-    # st.write(df)
 
     if st.button('Comparar Sobrevida', type='primary'):
-        st.write("Enviando dados para predição...")
+        
         df_processed = preprocessing.test_preprocessing(df, enc, norm, ohe_list, te_list)
 
-        st.write(df_processed)
+        df_processed = df_processed.reindex(columns=artifacts["features"], fill_value=0)
 
-        # df_processed = df_processed.reindex(columns=artifacts["features"], fill_value=0)
+        pred = model.predict(df_processed)
+        surv_funcs = model.predict_survival_function(df_processed)
 
-        # pred = model.predict(df_processed)
+        # Criar figura
+        fig, ax = plt.subplots()
 
-        # st.write(pred)
+        # Plotar cada curva
+        for fn in surv_funcs:
+            ax.plot(fn.x, fn.y)
+
+        ax.set_title("Função de Sobrevivência")
+        ax.set_xlabel("Tempo")
+        ax.set_ylabel("Probabilidade de Sobrevivência")
+
+        # Mostrar no Streamlit
+        st.pyplot(fig)
 
 
     #################################################
